@@ -1,133 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LHJWV03EY8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player</title>
+    <script src="//content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            color: #fff;
+            position: relative;
+        }
 
-  gtag('config', 'G-LHJWV03EY8');
-</script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Stmpup Live</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #000;
-    }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #000000, #0a0a0a);
+            z-index: -1;
+        }
 
-    iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-    }
+        #player-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+            border: 2px solid #00c2ff;
+            box-shadow: 0 0 20px #00c2ff, 0 0 40px rgba(0, 194, 255, 0.5);
+            box-sizing: border-box;
+        }
 
-    /* Custom Popup Style */
-    .popup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
+        .content-wrapper {
+            position: relative;
+            width: 100%;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 100vh;
+        }
 
-    .popup-content {
-      background: #222;
-      color: white;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      width: 75%;
-      max-width: 260px;
-    }
+        .telegram-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #0088cc, #00c2ff);
+            color: white;
+            padding: 12px 28px;
+            margin: 20px 0;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 136, 204, 0.7);
+            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
 
-    .popup-content h2 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      color: #4da3ff;
-    }
+        .telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.9);
+        }
 
-    .popup-content p {
-      font-size: 14px;
-      margin: 8px 0;
-    }
+        .telegram-btn i {
+            margin-right: 8px;
+        }
 
-    .popup-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+        /* Custom scrollbar styles */
+        body::-webkit-scrollbar {
+            width: 8px;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
 
-    .popup-buttons button {
-      padding: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-    }
+        body::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: rgba(0, 194, 255, 0.5);
+        }
 
-    .join-btn {
-      background: #4da3ff;
-      color: white;
-      border-radius: 5px;
-    }
+        body::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0, 194, 255, 0.7);
+        }
 
-    .already-btn {
-      background: #444;
-      color: white;
-      border-radius: 5px;
-    }
+        /* Neon pulse animation for player border */
+        @keyframes neonPulse {
+            0% {
+                box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 15px #00c2ff, 0 0 30px rgba(0, 194, 255, 0.7);
+            }
+            100% {
+                box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5);
+            }
+        }
 
-    .telegram-link {
-      color: #4da3ff;
-      font-weight: bold;
-      text-decoration: none;
-      cursor: pointer;
-    }
-  </style>
+        #player-container {
+            animation: neonPulse 3s infinite ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .telegram-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-
-  <!-- Embedded Player via iframe -->
-  <iframe src="https://dai.fancode.com/primary/123082_english_hls_5770ta-no/index.m3u8" allowfullscreen></iframe>
-
-  <!-- Telegram Popup -->
-  <div class="popup" id="customPopup">
-    <div class="popup-content">
-      <h2>Support Us!</h2>
-      <p>Join our Telegram channel <a href="https://t.me/+cn6vlOpdjURjYjU1" class="telegram-link">Stmpup</a> for more updates.</p>
-      <div class="popup-buttons">
-        <button class="join-btn" onclick="window.location.href='https://t.me/+cn6vlOpdjURjYjU1'">Join Now</button>
-        <button class="already-btn" onclick="closePopup()">Already Joined</button>
-      </div>
+    <div id="player-container"></div>
+    
+    <div class="content-wrapper">
+        <!-- Content area after the video if needed -->
     </div>
-  </div>
 
-  <script>
-    // First alert
-    setTimeout(() => {
-      let firstPopup = confirm("Join Our Telegram Channel Stmpup");
-      if (firstPopup) {
-        window.location.href = "https://t.me/+cn6vlOpdjURjYjU1";
-      }
-      // Show second popup after 0.5s
-      setTimeout(() => {
-        document.getElementById("customPopup").style.display = "flex";
-      }, 500);
-    }, 1000);
+    <a href="#" class="telegram-btn" id="telegram-btn">
+        <i class="fab fa-telegram"></i> Join Telegram
+    </a>
 
-    function closePopup() {
-      document.getElementById("customPopup").style.display = "none";
-    }
-  </script>
+    <script type="text/javascript">
+        // Fetch JSON and Load JW Player
+        fetch("https://raw.githubusercontent.com/StmpupCricket/T-Sports-json/refs/heads/main/data.json")
+            .then(response => response.json())
+            .then(data => {
+                jwplayer("player-container").setup({
+                    file: data.stream_url,
+                    aspectratio: '16:9',
+                    width: '100%',
+                    height: '100%',
+                    autostart: true,
+                    stretching: 'uniform',
+                    controls: true,
+                    displaytitle: true,
+                    displaydescription: true
+                });
+            })
+            .catch(error => console.error("Error loading JSON:", error));
 
+        // Force controls to be visible and fix player size
+        jwplayer().on('ready', function () {
+            const playerElement = document.querySelector('#player-container');
+            if (playerElement) {
+                playerElement.style.height = '100vh';
+            }
+        });
+
+        // Make sure player fills background when playing
+        jwplayer().on('play', function () {
+            document.body.style.backgroundColor = "#000";
+        });
+
+        // You can customize your Telegram link here
+        document.getElementById('telegram-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Optional: Add your Telegram link here if needed
+            alert('Telegram button clicked');
+        });
+    </script>
 </body>
-        </html>
+
+</html>
