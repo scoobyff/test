@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toxify</title>
+    <script src="//content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+    <style>
+        /* Full Black Background */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Telegram Button Styling */
+        .telegram-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #0088cc;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-bottom: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 136, 204, 0.5);
+        }
+
+        .telegram-btn img {
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        /* Video Container - Slightly Smaller to Show Edges */
+        .video-container {
+            width: 98vw;
+            height: 55.25vw;
+            max-height: 100vh;
+            border: 3px solid #007BFF;
+            box-shadow: 0px 0px 20px rgba(0, 123, 255, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* JW Player Styling */
+        #jwplayerDiv {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        /* Join Telegram Button */
+        .join-btn {
+            background: linear-gradient(to right, #007BFF, #0044CC);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Popup Style */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: #222;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            width: 75%;
+            max-width: 260px;
+            position: relative;
+        }
+
+        .popup-content h2 {
+            margin: 0 0 8px;
+            font-size: 18px;
+            color: #4da3ff;
+        }
+
+        .popup-content p {
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        .popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .popup-buttons button {
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .join-btn-popup {
+            background: #4da3ff;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .already-btn {
+            background: #444;
+            color: white;
+            border-radius: 5px;
+        }
+
+        /* Clickable Telegram Link */
+        .telegram-link {
+            color: #4da3ff;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Golden Glow Effect for Second Popup */
+        #customPopup .popup-content {
+            border: 3px solid #FFD700;
+            box-shadow: 0px 0px 15px rgba(255, 215, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Telegram Channel Button -->
+    <a href="https://t.me/toxify18" class="telegram-btn">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram Logo">
+        Toxify 
+    </a>
+
+    <!-- Video Player (Slightly Smaller to Show Border Edges) -->
+    <div class="video-container">
+        <div id="jwplayerDiv"></div>
+    </div>
+
+    <!-- Join Telegram Button -->
+    <a href="https://t.me/toxify18" class="join-btn">Join Telegram</a>
+
+    <!-- Second Popup -->
+    <div class="popup" id="customPopup">
+        <div class="popup-content">
+            <h2>Support Us!</h2>
+            <p>Join our Telegram channel <a href="https://t.me/toxify18" class="telegram-link">Toxify</a> for more updates.</p>
+            <div class="popup-buttons">
+                <button class="join-btn-popup" onclick="window.location.href='https://t.me/toxify18'">Join Now</button>
+                <button class="already-btn" onclick="closePopup()">Already Joined</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // First Popup (Browser Alert)
+        setTimeout(() => {
+            let firstPopup = confirm("Join Our Telegram Channel Toxify");
+            if (firstPopup) {
+                window.location.href = "https://t.me/toxify18";
+            }
+            // Show Second Popup after the first one closes
+            setTimeout(() => {
+                document.getElementById("customPopup").style.display = "flex";
+            }, 500);
+        }, 1000);
+
+        // Close Second Popup
+        function closePopup() {
+            document.getElementById("customPopup").style.display = "none";
+        }
+
+              // Fetch JSON and Load JW Player
+        fetch("https://raw.githubusercontent.com/StmpupCricket/T-Sports-json/refs/heads/main/data.json") // Replace with actual hosted JSON URL
+            .then(response => response.json())
+            .then(data => {
+                jwplayer("jwplayerDiv").setup({
+                    file: data.stream_url,
+                    autostart: true,
+                    width: "100%",
+                    height: "100%",
+                    stretching: "uniform"
+                });
+            })
+            .catch(error => console.error("Error loading JSON:", error));
+    </script>
+
+</body>
+</html>  
