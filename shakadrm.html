@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shaka Player</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .player-wrapper {
+      position: relative;
+      width: 100%;
+      border: 4px solid #0ff;
+      box-shadow: 0 0 20px #0ff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    video {
+      width: 100%;
+      display: block;
+    }
+    .controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+    .player-wrapper:hover .controls {
+      opacity: 1;
+    }
+    .play-button, .volume-button, .fullscreen-button, .settings-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+    .progress-container {
+      flex-grow: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      margin: 0 15px;
+      cursor: pointer;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #0ff;
+      border-radius: 4px;
+      width: 0%;
+    }
+    .time-display {
+      color: white;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+    .settings-menu {
+      position: absolute;
+      bottom: 60px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 8px;
+      padding: 10px;
+      width: 200px;
+      display: none;
+    }
+    .settings-menu.active {
+      display: block;
+    }
+    .settings-menu p {
+      margin: 5px 0;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    select {
+      width: 100%;
+      padding: 5px;
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .volume-slider {
+      width: 80px;
+      margin-left: 10px;
+      appearance: none;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      background: #0ff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stream Player</h1>
+    <div class="player-wrapper">
+      <video id="video" poster="/api/placeholder/1280/720"></video>
+      <div class="controls">
+        <button class="play-button" id="play-pause"><i class="fas fa-play"></i></button>
+        <div class="progress-container" id="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <span class="time-display" id="time-display">0:00 / 0:00</span>
+        <button class="volume-button" id="volume-button"><i class="fas fa-volume-up"></i></button>
+        <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.1" value="1">
+        <button class="settings-button" id="settings-button"><i class="fas fa-cog"></i></button>
+        <button class="fullscreen-button" id="fullscreen-button"><i class="fas fa-expand"></i></button>
+      </div>
+      <div class="settings-menu" id="settings-menu">
+        <p>Quality</p>
+        <select id="quality-selector"></select>
+        <p>Audio Track</p>
+        <select id="audio-selector"></select>
+        <p>Playback Speed</p>
+        <select id="speed-selector">
+          <option value="0.5">0.5x</option>
+          <option value="1" selected>Normal</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2x</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Player elements
+    const video = document.getElementById('video');
+    const playPauseBtn = document.getElementById('play-pause');
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const timeDisplay = document.getElementById('time-display');
+    const volumeBtn = document.getElementById('volume-button');
+    const volumeSlider = document.getElementById('volume-slider');
+    const fullscreenBtn = document.getElementById('fullscreen-button');
+    const settingsBtn = document.getElementById('settings-button');
+    const settingsMenu = document.getElementById('settings-menu');
+    const qualitySelector = document.getElementById('quality-selector');
+    const audioSelector = document.getElementById('audio-selector');
+    const speedSelector = document.getElementById('speed-selector');
+    
+    // Stream configuration - Update these values from your backend
+    const streamConfig = {
+      url: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd', // Default stream URL
+      drmEnabled: false,
+      licenseServer: '',
+      keyId: '',
+      key: ''
+    };
+    
+    let player;
+    
+    // Initialize Shaka Player
+    function initApp() {
+      shaka.polyfill.installAll();
+      if (shaka.Player.isBrowserSupported()) {
+        initPlayer();
+      } else {
+        console.error('Browser not supported for Shaka Player');
+        alert('Your browser is not supported for video playback');
+      }
+    }
+    
+    function initPlayer() {
+      player = new shaka.Player(video);
+      player.addEventListener('error', onErrorEvent);
+      
+      // Add event listeners for controls
+      video.addEventListener('timeupdate', updateProgress);
+      video.addEventListener('play', () => playPauseBtn.querySelector('i').className = 'fas fa-pause');
+      video.addEventListener('pause', () => playPauseBtn.querySelector('i').className = 'fas fa-play');
+      playPauseBtn.addEventListener('click', togglePlay);
+      progressContainer.addEventListener('click', seek);
+      volumeBtn.addEventListener('click', toggleMute);
+      volumeSlider.addEventListener('input', () => {
+        video.volume = volumeSlider.value;
+        updateVolumeIcon(video.volume);
+      });
+      settingsBtn.addEventListener('click', () => settingsMenu.classList.toggle('active'));
+      fullscreenBtn.addEventListener('click', toggleFullscreen);
+      speedSelector.addEventListener('change', () => video.playbackRate = parseFloat(speedSelector.value));
+      
+      // Configure DRM if enabled
+      if (streamConfig.drmEnabled) {
+        configureDrm();
+      }
+      
+      // Load the stream
+      loadStream(streamConfig.url);
+    }
+    
+    function configureDrm() {
+      player.configure({
+        drm: {
+          servers: {
+            'com.widevine.alpha': streamConfig.licenseServer
+          },
+          advanced: {
+            'com.widevine.alpha': {
+              videoRobustness: 'SW_SECURE_CRYPTO',
+              audioRobustness: 'SW_SECURE_CRYPTO'
+            }
+          }
+        }
+      });
+      
+      // For testing with clear keys
+      if (streamConfig.keyId && streamConfig.key) {
+        player.configure({
+          drm: {
+            clearKeys: {
+              [streamConfig.keyId]: streamConfig.key
+            }
+          }
+        });
+      }
+    }
+    
+    function loadStream(manifestUri) {
+      player.load(manifestUri).then(() => {
+        console.log('Video loaded');
+        updateTrackOptions();
+        video.play().catch(err => console.error('Error playing video:', err));
+      }).catch(onError);
+    }
+    
+    function updateTrackOptions() {
+      // Update quality options
+      const tracks = player.getVariantTracks();
+      const heights = [...new Set(tracks.map(t => t.height).filter(h => h))].sort((a, b) => b - a);
+      
+      qualitySelector.innerHTML = '<option value="auto" selected>Auto</option>';
+      heights.forEach(h => {
+        const option = document.createElement('option');
+        option.value = h;
+        option.textContent = `${h}p`;
+        qualitySelector.appendChild(option);
+      });
+      
+      qualitySelector.onchange = () => {
+        const height = qualitySelector.value;
+        if (height === 'auto') {
+          player.configure({abr: {enabled: true}});
+        } else {
+          player.configure({abr: {enabled: false}});
+          const track = tracks.find(t => t.height == height);
+          if (track) player.selectVariantTrack(track, true);
+        }
+      };
+      
+      // Update audio options
+      const languages = [...new Set(tracks.map(t => t.language).filter(l => l))];
+      
+      if (languages.length > 1) {
+        languages.forEach(lang => {
+          const option = document.createElement('option');
+          option.value = lang;
+          option.textContent = lang;
+          audioSelector.appendChild(option);
+        });
+        
+        audioSelector.onchange = () => {
+          const lang = audioSelector.value;
+          const track = tracks.find(t => t.language === lang);
+          if (track) player.selectVariantTrack(track, true);
+        };
+      }
+    }
+    
+    function updateProgress() {
+      const currentTime = video.currentTime;
+      const duration = video.duration || 0;
+      progressBar.style.width = ((currentTime / duration) * 100) + '%';
+      timeDisplay.textContent = formatTime(currentTime) + ' / ' + formatTime(duration);
+    }
+    
+    function togglePlay() {
+      if (video.paused) video.play(); else video.pause();
+    }
+    
+    function seek(event) {
+      const pos = (event.clientX - progressContainer.getBoundingClientRect().left) / progressContainer.offsetWidth;
+      video.currentTime = pos * video.duration;
+    }
+    
+    function toggleMute() {
+      video.muted = !video.muted;
+      updateVolumeIcon(video.muted ? 0 : video.volume);
+    }
+    
+    function updateVolumeIcon(volume) {
+      const icon = volumeBtn.querySelector('i');
+      icon.className = volume === 0 ? 'fas fa-volume-mute' : 
+                      volume < 0.5 ? 'fas fa-volume-down' : 'fas fa-volume-up';
+    }
+    
+    function toggleFullscreen() {
+      const wrapper = document.querySelector('.player-wrapper');
+      if (!document.fullscreenElement) {
+        wrapper.requestFullscreen ? wrapper.requestFullscreen() : 
+        wrapper.webkitRequestFullscreen ? wrapper.webkitRequestFullscreen() : 
+        wrapper.msRequestFullscreen && wrapper.msRequestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+    
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00';
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
+    
+    function onErrorEvent(event) {
+      console.error('Player error:', event.detail);
+    }
+    
+    function onError(error) {
+      console.error('Error code:', error.code, 'object:', error);
+    }
+    
+    // Initialize player when document is loaded
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
