@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JWPlayer ClearKey DRM Content Player</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jwplayer/8.24.0/jwplayer.js"></script>
+    <style>
+        #player-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .instructions {
+            margin: 20px auto;
+            max-width: 800px;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h1>ClearKey DRM Content Player</h1>
+        <p>This player is configured to play protected content using the ClearKey DRM scheme. Enter your content information below:</p>
+    </div>
+
+    <div class="instructions">
+        <form id="content-form">
+            <div>
+                <label for="stream-url">Stream URL (DASH/HLS):</label>
+                <input type="text" id="stream-url" style="width: 80%;" placeholder="https://example.com/content/video.mpd" />
+            </div>
+            <div style="margin-top: 10px;">
+                <label for="key-id">Key ID (hex):</label>
+                <input type="text" id="key-id" style="width: 80%;" placeholder="e4a1939d9c50534cbcf3388e027682a2" />
+            </div>
+            <div style="margin-top: 10px;">
+                <label for="content-key">Content Key (hex):</label>
+                <input type="text" id="content-key" style="width: 80%;" placeholder="8b76c36e9d7d3d8de2d047a607892c05" />
+            </div>
+            <button type="submit" style="margin-top: 10px;">Load Content</button>
+        </form>
+    </div>
+
+    <div id="player-container">
+        <div id="player"></div>
+    </div>
+
+    <script>
+        // JWPlayer license key - replace with your own
+        jwplayer.key = "XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo"; // You need to obtain a valid JWPlayer license key
+        
+        // Initialize player with empty content
+        const player = jwplayer("player").setup({
+            width: "100%",
+            aspectratio: "16:9",
+            primary: "html5",
+            title: "ClearKey DRM Protected Content",
+            playlist: [{
+                file: "https://example.com/placeholder.mp4", // Placeholder content
+                image: "/api/placeholder/800/450"
+            }]
+        });
+
+        // Load content when form is submitted
+        document.getElementById("content-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            loadClearKeyContent();
+        });
+
+        function loadClearKeyContent() {
+            const streamUrl = document.getElementById("stream-url").value;
+            const keyId = document.getElementById("key-id").value;
+            const contentKey = document.getElementById("content-key").value;
+
+            if (!streamUrl || !keyId || !contentKey) {
+                alert("Please enter all required information");
+                return;
+            }
+
+            // Prepare ClearKey configuration
+            // ClearKey expects base64 encoding of the JSON key data
+            const keyPair = {};
+            keyPair[keyId] = contentKey;
+            
+            const clearKeyConfig = {
+                clearkey: {
+                    // In ClearKey, we directly provide the key/keyId pairs
+                    keys: [{
+                        kid: keyId,
+                        key: contentKey
+                    }]
+                }
+            };
+
+            console.log("Setting up player with ClearKey DRM:", clearKeyConfig);
+
+            // Set up the player with ClearKey DRM configuration
+            player.setup({
+                width: "100%",
+                aspectratio: "16:9",
+                primary: "html5",
+                title: "ClearKey DRM Protected Content",
+                file: streamUrl,
+                drm: clearKeyConfig
+            });
+        }
+
+        // Example function to load test content
+        function loadExampleContent() {
+            // Example values for testing - replace with your actual values
+            document.getElementById("stream-url").value = "https://linearjitp-playback.astro.com.my/dash-wv/linear/408/default_ott.mpd";
+            document.getElementById("key-id").value = "3c4508af348844107f5e026a4fd6b16e";
+            document.getElementById("content-key").value = "1a655189ab5c49eb235308c2b1a9e710";
+            loadClearKeyContent();
+        }
+
+        // Utility function for hex to base64 conversion if needed
+        function hexToBase64(hexString) {
+            const raw = hexString.match(/\w{2}/g).map(function(a) {
+                return String.fromCharCode(parseInt(a, 16));
+            }).join("");
+            return btoa(raw);
+        }
+    </script>
+</body>
+</html>
