@@ -170,9 +170,8 @@
     const streamConfig = {
       url: 'https://linearjitp-playback.astro.com.my/dash-wv/linear/408/default_ott.mpd', // Default stream URL
       drmEnabled: false,
-      licenseServer: '',
-      keyId: '1a655189ab5c49eb235308c2b1a9e710',
-      key: '3c4508af348844107f5e026a4fd6b16e'
+      keyId: '3c4508af348844107f5e026a4fd6b16e',
+      key: '1a655189ab5c49eb235308c2b1a9e710'
     };
     
     let player;
@@ -207,32 +206,8 @@
       fullscreenBtn.addEventListener('click', toggleFullscreen);
       speedSelector.addEventListener('change', () => video.playbackRate = parseFloat(speedSelector.value));
       
-      // Configure DRM if enabled
-      if (streamConfig.drmEnabled) {
-        configureDrm();
-      }
-      
-      // Load the stream
-      loadStream(streamConfig.url);
-    }
-    
-    function configureDrm() {
-      player.configure({
-        drm: {
-          servers: {
-            'com.widevine.alpha': streamConfig.licenseServer
-          },
-          advanced: {
-            'com.widevine.alpha': {
-              videoRobustness: 'SW_SECURE_CRYPTO',
-              audioRobustness: 'SW_SECURE_CRYPTO'
-            }
-          }
-        }
-      });
-      
-      // For testing with clear keys
-      if (streamConfig.keyId && streamConfig.key) {
+      // Configure DRM if enabled with clearkey
+      if (streamConfig.drmEnabled && streamConfig.keyId && streamConfig.key) {
         player.configure({
           drm: {
             clearKeys: {
@@ -241,6 +216,9 @@
           }
         });
       }
+      
+      // Load the stream
+      loadStream(streamConfig.url);
     }
     
     function loadStream(manifestUri) {
@@ -279,6 +257,7 @@
       const languages = [...new Set(tracks.map(t => t.language).filter(l => l))];
       
       if (languages.length > 1) {
+        audioSelector.innerHTML = ''; // Clear existing options
         languages.forEach(lang => {
           const option = document.createElement('option');
           option.value = lang;
