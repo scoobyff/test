@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Video Player</title>
+    
+    <!-- Shaka Player Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .video-container {
+            width: 98vw;
+            height: 55.25vw;
+            max-height: 100vh;
+            border: 3px solid #007BFF;
+            box-shadow: 0px 0px 20px rgba(0, 123, 255, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        #videoPlayer {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background-color: #000;
+        }
+        
+        .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #007BFF;
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+        }
+        
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background: rgba(255, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video id="videoPlayer" controls></video>
+        <div class="spinner" id="loadingSpinner"></div>
+        <div class="error-message" id="errorDisplay"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Install polyfills for browser compatibility
+            shaka.polyfill.installAll();
+            
+            const spinner = document.getElementById('loadingSpinner');
+            spinner.style.display = 'block';
+            
+            // Specific stream info
+            const manifestUri = 'https://linearjitp-playback.astro.com.my/dash-wv/linear/408/default_ott.mpd';
+            const keyId = '1a655189ab5c49eb235308c2b1a9e710';
+            const key = '3c4508af348844107f5e026a4fd6b16e';
+            
+            if (!shaka.Player.isBrowserSupported()) {
+                showError('Browser not supported! Try Chrome, Firefox, or Edge');
+                return;
+            }
+            
+            const video = document.getElementById('videoPlayer');
+            const player = new shaka.Player(video);
+            
+            // Enable debug logging
+            player.configure('abr.enabled', true);
+            
+            // Listen for errors with detailed information
+            player.addEventListener('error', function(event) {
+                const error = event.detail;
+                const message = 'Error Code: ' + error.code + ' - ' + error.message;
+                console.error(message, error);
+                showError(message);
+            });
+            
+            // The key is to properly format the clearKeys object
+            // The keyId must be lowercase without dashes
+            const formattedKeyId = keyId.toLowerCase();
+            const formattedKey = key.toLowerCase();
+            
+            // Configure player with correct DRM settings
+            player.configure({
+                drm: {
+                    clearKeys: {
+                        [formattedKeyId]: formattedKey
+                    }
+                }
+            });
+            
+            // Load the manifest and play the video
+            player.load(manifestUri).then(function() {
+                console.log('Video loaded successfully');
+                spinner.style.display = 'none';
+                
+                video.play().catch(e => {
+                    console.warn('Autoplay was prevented:', e);
+                    showError('Click to play video (Autoplay blocked)');
+                });
+            }).catch(function(error) {
+                spinner.style.display = 'none';
+                const message = 'Loading failed: ' + error.message + ' (Code: ' + error.code + ')';
+                console.error(message, error);
+                showError(message);
+                
+                // Try refreshing the page if it's a network error
+                if (error.code === shaka.util.Error.Code.BAD_HTTP_STATUS ||
+                    error.code === shaka.util.Error.Code.HTTP_ERROR) {
+                    setTimeout(() => {
+                        showError('Network issue detected. Trying again...');
+                        location.reload();
+                    }, 5000);
+                }
+            });
+        });
+        
+        function showError(message) {
+            const errorDisplay = document.getElementById('errorDisplay');
+            errorDisplay.textContent = message;
+            errorDisplay.style.display = 'block';
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
