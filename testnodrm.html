@@ -1,71 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NF8ZFVLJN9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NF8ZFVLJN9"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  gtag('config', 'G-NF8ZFVLJN9');
-</script>
+        gtag('config', 'G-NF8ZFVLJN9');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cxh.pages.dev/style.css">
+    <link rel="stylesheet" href="https://cxh.pages.dev/style.css">
     <title>Allrounder Tv</title>
     <script src="//content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Full Black Background */
         body {
             margin: 0;
             padding: 0;
-            background: #000000;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-        }
-
-        /* Video Container - With Neon Pulse Border */
-        .video-container {
-            width: 98vw;
-            height: 55.25vw;
-            max-height: 100vh;
+            min-height: 100vh;
+            background-color: #000;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            color: #fff;
             position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            animation: neonPulse 2s infinite alternate;
         }
 
-        @keyframes neonPulse {
-            0% {
-                box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
-            }
-            100% {
-                box-shadow: 0 0 15px #00ff00, 0 0 25px #00ff00, 0 0 35px #00ff00;
-            }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #000000, #0a0a0a);
+            z-index: -1;
         }
 
-        /* JW Player Styling */
         #jwplayerDiv {
             width: 100%;
             height: 100%;
-            border-radius: 20px;
         }
 
-        /* Join Telegram Button */
-        .join-btn {
-            background: linear-gradient(to right, #007BFF, #0044CC);
+        .video-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+            border: 2px solid #00c2ff;
+            box-shadow: 0 0 20px #00c2ff, 0 0 40px rgba(0, 194, 255, 0.5);
+            box-sizing: border-box;
+            animation: neonPulse 3s infinite ease-in-out;
+        }
+
+        .content-wrapper {
+            position: relative;
+            width: 100%;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 100vh;
+        }
+
+        .telegram-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #0088cc, #00c2ff);
             color: white;
-            font-size: 15px;
-            font-weight: bold;
-            padding: 12px 30px;
+            padding: 12px 28px;
+            margin: 20px 0;
             border-radius: 50px;
             text-decoration: none;
-            margin-top: 15px;
-            box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.5);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 136, 204, 0.7);
+            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.9);
+        }
+
+        .telegram-btn i {
+            margin-right: 8px;
+        }
+
+        /* Custom scrollbar styles */
+        body::-webkit-scrollbar {
+            width: 8px;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        body::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: rgba(0, 194, 255, 0.5);
+        }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0, 194, 255, 0.7);
+        }
+
+        /* Neon pulse animation for player border */
+        @keyframes neonPulse {
+            0% {
+                box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 15px #00c2ff, 0 0 30px rgba(0, 194, 255, 0.7);
+            }
+            100% {
+                box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .telegram-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
         }
 
         /* Popup Style */
@@ -79,6 +146,7 @@
             background: rgba(0, 0, 0, 0.7);
             justify-content: center;
             align-items: center;
+            z-index: 1000;
         }
 
         .popup-content {
@@ -143,14 +211,19 @@
         }
     </style>
 </head>
+
 <body>
-    <!-- Video Player on Top -->
     <div class="video-container">
         <div id="jwplayerDiv"></div>
     </div>
+    
+    <div class="content-wrapper">
+        <!-- Content area after the video if needed -->
+    </div>
 
-    <!-- Join Telegram Button -->
-    <a href="https://t.me/scoobystream" class="join-btn">Join Telegram</a>
+    <a href="https://t.me/scoobystream" class="telegram-btn">
+        <i class="fab fa-telegram"></i> Join Telegram
+    </a>
 
     <!-- Second Popup -->
     <div class="popup" id="customPopup">
@@ -183,18 +256,35 @@
         }
 
         // Fetch JSON and Load JW Player
-        fetch("https://raw.githubusercontent.com/StmpupCricket/T-Sports-json/refs/heads/main/data.json") // Replace with actual hosted JSON URL
+        fetch("https://raw.githubusercontent.com/StmpupCricket/T-Sports-json/refs/heads/main/data.json")
             .then(response => response.json())
             .then(data => {
                 jwplayer("jwplayerDiv").setup({
                     file: data.stream_url,
+                    aspectratio: '16:9',
+                    width: '100%',
+                    height: '100%',
                     autostart: true,
-                    width: "100%",
-                    height: "100%",
-                    stretching: "uniform"
+                    stretching: "uniform",
+                    controls: true
+                });
+                
+                // Force controls to be visible and fix player size
+                jwplayer().on('ready', function () {
+                    setTimeout(function() {
+                        const jwControls = document.querySelector('.jw-controls');
+                        if (jwControls) {
+                            jwControls.style.opacity = '1';
+                            jwControls.style.visibility = 'visible';
+                            jwControls.style.pointerEvents = 'auto';
+                        }
+                    }, 1000);
                 });
             })
-            .catch(error => console.error("Error loading JSON:", error)); 
+            .catch(error => console.error("Error loading JSON:", error));
     </script>
+
+    <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
 </body>
+
 </html>
