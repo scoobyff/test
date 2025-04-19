@@ -2,10 +2,12 @@
 <html lang="en">
 
 <head>
-    <script src="https://ssl.p.jwpcdn.com/player/v/8.32.1/jwplayer.js" type="text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player</title>
+    <title>Stream Player</title>
+    <!-- Include both Shaka and JWPlayer for fallback support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.6/shaka-player.compiled.js"></script>
+    <script src="https://ssl.p.jwpcdn.com/player/v/8.32.1/jwplayer.js" type="text/javascript"></script>
     <style>
         body {
             margin: 0;
@@ -41,6 +43,12 @@
             border: 2px solid #00c2ff;
             box-shadow: 0 0 20px #00c2ff, 0 0 40px rgba(0, 194, 255, 0.5);
             box-sizing: border-box;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .content-wrapper {
@@ -83,12 +91,10 @@
             margin-right: 8px;
         }
 
-        /* Make sure JW player controls are visible */
-        .jw-state-idle .jw-controls,
-        .jwplayer .jw-controls {
+        /* Player controls styling */
+        .shaka-controls-container {
             opacity: 1 !important;
             visibility: visible !important;
-            pointer-events: auto !important;
         }
 
         /* Custom scrollbar styles */
@@ -123,10 +129,93 @@
             animation: neonPulse 3s infinite ease-in-out;
         }
 
+        /* Loading spinner */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            z-index: 10;
+        }
+
+        .loading-spinner:after {
+            content: " ";
+            display: block;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border-radius: 50%;
+            border: 6px solid #00c2ff;
+            border-color: #00c2ff transparent #00c2ff transparent;
+            animation: spinner 1.2s linear infinite;
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Error message */
+        .error-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ff0000;
+            text-align: center;
+            max-width: 80%;
+            z-index: 20;
+        }
+
+        #player-buttons {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .player-switch-btn {
+            background: linear-gradient(90deg, #0088cc, #00c2ff);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 136, 204, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .player-switch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 136, 204, 0.7);
+        }
+
         @media (max-width: 768px) {
             .telegram-btn {
                 padding: 10px 20px;
                 font-size: 14px;
+            }
+            
+            #player-buttons {
+                bottom: 100px;
+            }
+            
+            .player-switch-btn {
+                padding: 6px 12px;
+                font-size: 12px;
             }
         }
     </style>
@@ -134,7 +223,18 @@
 </head>
 
 <body>
-    <div id="player-container"></div>
+    <div id="player-container">
+        <!-- Primary video element for Shaka Player -->
+        <video id="video" controls autoplay></video>
+        <!-- Loading spinner -->
+        <div class="loading-spinner" id="loading-spinner"></div>
+    </div>
+    
+    <div id="player-buttons">
+        <button class="player-switch-btn" id="shaka-btn">Shaka Player</button>
+        <button class="player-switch-btn" id="jw-btn">JW Player</button>
+        <button class="player-switch-btn" id="hls-btn">HLS.js</button>
+    </div>
     
     <div class="content-wrapper">
         <!-- Content area after the video if needed -->
@@ -145,103 +245,267 @@
     </a>
 
     <script type="text/javascript">
+        // JW Player license key
         jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
         
-        // Video stream configuration with headers
-        const playerConfig = {
-            file: "https://sshd1livetvdash-i.akamaihd.net/dash/live/2002464-b/sshd1livetvwv/master.mpd",
-            aspectratio: '16:9',
-            width: '100%',
-            height: '100%',
-            autostart: true,
-            image: 'https://mma.prnewswire.com/media/1919551/WillowTV_Logo.jpg?p=facebook',
-            mute: false,
-            preload: 'auto',
-            captions: { color: 'white', fontSize: '16px', backgroundOpacity: 0 },
-            sharing: {
-                sites: ['facebook', 'twitter']
+        // Stream configuration
+        const streamConfig = {
+            url: "https://sshd1livetvdash-i.akamaihd.net/dash/live/2002464-b/sshd1livetvwv/master.mpd",
+            keyId: "fe7718fbb3fb4ba78c07cc0f578744e6",
+            key: "624e24b1843b459fab0a949609416f0d",
+            headers: {
+                "Cookie": "session=hdntl=exp=1745154675~acl=*sshd1livetv*~id=c12f643f2a1789891c849728fc8f4507~data=hdntl~hmac=2686f09b83b69e9e0291c8f75cdb787d5b2ef0fd0218b513d27f2397442eb2c5",
+                "Referer": "https://www.hotstar.com/",
+                "Origin": "https://www.hotstar.com",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
             },
-            drm: {
-                "clearkey": {
-                    "keyId": "fe7718fbb3fb4ba78c07cc0f578744e6",
-                    "key": "624e24b1843b459fab0a949609416f0d"
-                }
-            },
-            stretching: 'uniform',
-            controls: true,
-            displaytitle: true,
-            displaydescription: true
+            poster: 'https://mma.prnewswire.com/media/1919551/WillowTV_Logo.jpg?p=facebook'
         };
-        
-        // Add HTTP request headers for authentication and origin verification
-        playerConfig.requestHttpHeaders = {
-            "Cookie": "hdntl=exp=1745154675~acl=*sshd1livetv*~id=c12f643f2a1789891c849728fc8f4507~data=hdntl~hmac=2686f09b83b69e9e0291c8f75cdb787d5b2ef0fd0218b513d27f2397442eb2c5",
-            "Referer": "https://www.hotstar.com/",
-            "Origin": "https://www.hotstar.com",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
-        };
-        
-        // Initialize the player with the configuration
-        jwplayer("player-container").setup(playerConfig);
 
-        // Force controls to be visible and fix player size
-        jwplayer().on('ready', function () {
-            const playerElement = document.querySelector('#player-container');
-            if (playerElement) {
-                playerElement.style.height = '100vh';
+        // Track current player
+        let currentPlayer = 'shaka';
+        let shakaPlayer = null;
+        let jwPlayerInstance = null;
+        
+        // Initialize Shaka Player (default)
+        function initShakaPlayer() {
+            if (shakaPlayer) {
+                shakaPlayer.destroy();
             }
             
-            // Set a timeout to ensure controls are visible after initialization
-            setTimeout(function() {
-                const jwControls = document.querySelector('.jw-controls');
-                if (jwControls) {
-                    jwControls.style.opacity = '1';
-                    jwControls.style.visibility = 'visible';
-                    jwControls.style.pointerEvents = 'auto';
+            currentPlayer = 'shaka';
+            document.getElementById('video').style.display = 'block';
+            document.getElementById('loading-spinner').style.display = 'block';
+            
+            // Create a new Shaka Player instance
+            shakaPlayer = new shaka.Player(document.getElementById('video'));
+            
+            // Configure Shaka with DRM
+            shakaPlayer.configure({
+                drm: {
+                    clearKeys: {
+                        [streamConfig.keyId]: streamConfig.key
+                    }
                 }
-            }, 1000);
-        });
-
-        // Make sure controls appear on player interaction
-        jwplayer().on('play', function () {
-            document.body.style.backgroundColor = "#000";
-        });
-
-        // Ensure controls are visible when user taps
-        document.addEventListener('click', function() {
-            const jwControls = document.querySelector('.jw-controls');
-            if (jwControls) {
-                jwControls.style.opacity = '1';
-                jwControls.style.visibility = 'visible';
-                jwControls.style.pointerEvents = 'auto';
+            });
+            
+            // Add event listeners for Shaka Player
+            shakaPlayer.addEventListener('error', onErrorEvent);
+            
+            // Set up request filter for headers
+            shakaPlayer.getNetworkingEngine().registerRequestFilter(function(type, request) {
+                // Add headers to all requests
+                Object.keys(streamConfig.headers).forEach(key => {
+                    request.headers[key] = streamConfig.headers[key];
+                });
+            });
+            
+            // Load the manifest
+            shakaPlayer.load(streamConfig.url).then(function() {
+                // Stream loaded successfully
+                console.log('Shaka Player loaded successfully');
+                document.getElementById('loading-spinner').style.display = 'none';
+            }).catch(onError);
+        }
+        
+        // Initialize JW Player
+        function initJWPlayer() {
+            if (shakaPlayer) {
+                shakaPlayer.destroy();
+                document.getElementById('video').style.display = 'none';
             }
+            
+            currentPlayer = 'jw';
+            document.getElementById('loading-spinner').style.display = 'block';
+            
+            // Create a div for JW Player if it doesn't exist
+            let jwPlayerDiv = document.getElementById('jw-player');
+            if (!jwPlayerDiv) {
+                jwPlayerDiv = document.createElement('div');
+                jwPlayerDiv.id = 'jw-player';
+                document.getElementById('player-container').appendChild(jwPlayerDiv);
+            }
+            
+            // Configure JW Player
+            jwPlayerInstance = jwplayer('jw-player').setup({
+                file: streamConfig.url,
+                width: '100%',
+                height: '100%',
+                autostart: true,
+                mute: false,
+                image: streamConfig.poster,
+                drm: {
+                    clearkey: {
+                        keyId: streamConfig.keyId,
+                        key: streamConfig.key
+                    }
+                },
+                requestHttpHeaders: streamConfig.headers
+            });
+            
+            jwPlayerInstance.on('ready', function() {
+                document.getElementById('loading-spinner').style.display = 'none';
+            });
+            
+            jwPlayerInstance.on('error', function(event) {
+                console.error('JW Player error:', event);
+                showErrorMessage('JW Player error: ' + event.message);
+            });
+        }
+        
+        // Initialize HLS.js Player (as a fallback)
+        function initHLSPlayer() {
+            const videoElement = document.getElementById('video');
+            videoElement.style.display = 'block';
+            document.getElementById('loading-spinner').style.display = 'block';
+            
+            if (shakaPlayer) {
+                shakaPlayer.destroy();
+            }
+            
+            currentPlayer = 'hls';
+            
+            // Attempt to load a direct HLS stream instead
+            const hlsUrl = streamConfig.url.replace('master.mpd', 'master.m3u8');
+            
+            // Create script element for HLS.js if it doesn't exist
+            if (!window.Hls) {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.0/hls.min.js';
+                script.onload = function() {
+                    loadHLSStream();
+                };
+                document.head.appendChild(script);
+            } else {
+                loadHLSStream();
+            }
+            
+            function loadHLSStream() {
+                if (Hls.isSupported()) {
+                    const hls = new Hls({
+                        xhrSetup: function(xhr, url) {
+                            // Add headers to all requests
+                            Object.keys(streamConfig.headers).forEach(key => {
+                                xhr.setRequestHeader(key, streamConfig.headers[key]);
+                            });
+                        }
+                    });
+                    hls.loadSource(hlsUrl);
+                    hls.attachMedia(videoElement);
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        videoElement.play();
+                        document.getElementById('loading-spinner').style.display = 'none';
+                    });
+                    
+                    hls.on(Hls.Events.ERROR, function(event, data) {
+                        if (data.fatal) {
+                            console.error('HLS.js error:', data);
+                            showErrorMessage('Failed to load HLS stream. Please try another player.');
+                        }
+                    });
+                } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+                    // Native HLS support (Safari)
+                    videoElement.src = hlsUrl;
+                    videoElement.addEventListener('loadedmetadata', function() {
+                        videoElement.play();
+                        document.getElementById('loading-spinner').style.display = 'none';
+                    });
+                    videoElement.addEventListener('error', function(e) {
+                        console.error('Native HLS error:', e);
+                        showErrorMessage('Failed to load HLS stream. Please try another player.');
+                    });
+                } else {
+                    showErrorMessage('HLS.js is not supported in this browser. Please try another player.');
+                }
+            }
+        }
+        
+        // Error handling functions
+        function onErrorEvent(event) {
+            onError(event.detail);
+        }
+        
+        function onError(error) {
+            console.error('Shaka Player error:', error);
+            showErrorMessage('Error loading stream: ' + error.message);
+        }
+        
+        function showErrorMessage(message) {
+            document.getElementById('loading-spinner').style.display = 'none';
+            
+            // Create error message element if it doesn't exist
+            let errorEl = document.getElementById('error-message');
+            if (!errorEl) {
+                errorEl = document.createElement('div');
+                errorEl.id = 'error-message';
+                errorEl.className = 'error-message';
+                document.getElementById('player-container').appendChild(errorEl);
+            }
+            
+            errorEl.innerHTML = `
+                <h3>Playback Error</h3>
+                <p>${message}</p>
+                <p>Please try another player option or check your connection.</p>
+            `;
+        }
+        
+        // Initialize the video player when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if Shaka is supported
+            if (shaka.Player.isBrowserSupported()) {
+                initShakaPlayer();
+            } else {
+                console.warn('Shaka Player is not supported in this browser');
+                initJWPlayer();
+            }
+            
+            // Add event listeners for player switch buttons
+            document.getElementById('shaka-btn').addEventListener('click', function() {
+                clearPlayerContainer();
+                initShakaPlayer();
+            });
+            
+            document.getElementById('jw-btn').addEventListener('click', function() {
+                clearPlayerContainer();
+                initJWPlayer();
+            });
+            
+            document.getElementById('hls-btn').addEventListener('click', function() {
+                clearPlayerContainer();
+                initHLSPlayer();
+            });
         });
+        
+        // Clear the player container
+        function clearPlayerContainer() {
+            // Remove error message if exists
+            const errorEl = document.getElementById('error-message');
+            if (errorEl) {
+                errorEl.remove();
+            }
+            
+            // Remove JW Player if exists
+            const jwPlayerDiv = document.getElementById('jw-player');
+            if (jwPlayerDiv) {
+                jwPlayerDiv.remove();
+            }
+            
+            // Reset video element
+            const videoEl = document.getElementById('video');
+            if (videoEl) {
+                videoEl.pause();
+                videoEl.removeAttribute('src');
+                videoEl.load();
+            }
+        }
 
-        jwplayer().on('error', function (e) {
-            console.error("Playback error:", e.message);
-            // Enhanced error handling to show more details
-            const errorContainer = document.createElement('div');
-            errorContainer.style.position = 'absolute';
-            errorContainer.style.top = '50%';
-            errorContainer.style.left = '50%';
-            errorContainer.style.transform = 'translate(-50%, -50%)';
-            errorContainer.style.backgroundColor = 'rgba(0,0,0,0.7)';
-            errorContainer.style.padding = '20px';
-            errorContainer.style.borderRadius = '10px';
-            errorContainer.style.color = 'white';
-            errorContainer.innerHTML = `<h3>Playback Error</h3><p>${e.message}</p><p>Please try refreshing the page or check your connection.</p>`;
-            document.getElementById('player-container').appendChild(errorContainer);
-        });
-
-        // You can add your Telegram link here
+        // Telegram button functionality
         document.getElementById('telegram-btn').addEventListener('click', function(e) {
             e.preventDefault();
-            // Replace with your actual Telegram link in the backend
-            // window.open('https://t.me/scoobystream', '_blank');
             alert('Please Join Our Telegram Channels for links');
         });
     </script>
 </body>
-<script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
-
+<!-- Disable developer tools -->
+<script src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
 </html>
