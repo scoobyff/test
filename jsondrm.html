@@ -129,12 +129,42 @@
                 font-size: 14px;
             }
         }
+
+        /* Loading indicator */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 5;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 194, 255, 0.3);
+            border-top: 4px solid #00c2ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <div id="player-container"></div>
+    <div id="player-container">
+        <div class="loading" id="loading-indicator">
+            <div class="loading-spinner"></div>
+            <div>Loading stream...</div>
+        </div>
+    </div>
     
     <div class="content-wrapper">
         <!-- Content area after the video if needed -->
@@ -148,19 +178,42 @@
         // Initialize JW Player key
         jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
         
-        // Function to load stream configuration from JSON file
+        // GitHub raw JSON URL
+        const configUrl = 'https://raw.githubusercontent.com/scoobyff/jsondrm/main/data.json';
+        
+        // Function to load stream configuration from GitHub JSON
         async function loadStreamConfig() {
             try {
-                // Fetch the stream config from the JSON file
-                const response = await fetch('stream_config.json');
+                // Show loading indicator
+                document.getElementById('loading-indicator').style.display = 'block';
+                
+                // Fetch the stream config from the GitHub raw URL
+                // Adding cache-busting parameter to avoid caching issues
+                const timestamp = new Date().getTime();
+                const response = await fetch(`${configUrl}?_=${timestamp}`, {
+                    cache: 'no-store',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
                 if (!response.ok) {
                     throw new Error('Failed to load stream configuration');
                 }
                 
                 const config = await response.json();
+                
+                // Hide loading indicator
+                document.getElementById('loading-indicator').style.display = 'none';
+                
                 return config;
             } catch (error) {
                 console.error('Error loading stream configuration:', error);
+                
+                // Show error message in loading indicator
+                const loadingIndicator = document.getElementById('loading-indicator');
+                loadingIndicator.innerHTML = `<div>Error loading stream. Please try again later.</div>`;
+                
                 return null;
             }
         }
@@ -224,6 +277,19 @@
 
             jwplayer().on('error', function (e) {
                 console.error("Playback error:", e.message);
+                
+                // Show error message in player container
+                const playerContainer = document.getElementById('player-container');
+                playerContainer.innerHTML = `
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                        <div style="font-size: 18px; margin-bottom: 15px;">Stream playback error</div>
+                        <div style="font-size: 14px;">${e.message}</div>
+                        <button style="margin-top: 20px; padding: 10px 20px; background: #00c2ff; border: none; border-radius: 5px; color: white; cursor: pointer;" 
+                                onclick="window.location.reload()">
+                            Retry
+                        </button>
+                    </div>
+                `;
             });
         }
         
