@@ -1,257 +1,1203 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widevine Player</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.6/shaka-player.compiled.js"></script>
+    <title>Scooby Streaming Hub</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+        
+        :root {
+            --neon-primary: #00ff66;
+            --neon-secondary: #ff00c8;
+            --neon-blue: #00c3ff;
+            --neon-glow: 0 0 10px var(--neon-primary), 0 0 20px var(--neon-primary), 0 0 30px var(--neon-primary);
+            --neon-glow-secondary: 0 0 10px var(--neon-secondary), 0 0 20px var(--neon-secondary);
+            --neon-glow-blue: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+        }
+        
         body {
+            font-family: 'Orbitron', Arial, sans-serif;
+            background-color: #0c0c0c;
+            color: white;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 102, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 200, 0.1) 0%, transparent 20%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0, 255, 102, 0.3);
+        }
+        
+        h1 {
+            margin: 0;
+            color: white;
+            text-shadow: var(--neon-glow);
+            letter-spacing: 2px;
+            font-weight: 700;
+            position: relative;
+            animation: neonPulse 3s infinite alternate;
+        }
+        
+        @keyframes neonPulse {
+            0%, 18%, 22%, 92%, 100% {
+                text-shadow: var(--neon-glow);
+            }
+            20%, 90% {
+                text-shadow: 0 0 5px var(--neon-primary), 0 0 10px var(--neon-primary);
+            }
+        }
+        
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .category-box {
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid var(--neon-blue);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 5px rgba(0, 195, 255, 0.3);
+            aspect-ratio: 1 / 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: #000;
-            font-family: 'Arial', sans-serif;
-            overflow-x: hidden;
-            color: #fff;
-            position: relative;
         }
-
-        body::before {
+        
+        .category-box:before {
             content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, #000000, #0a0a0a);
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
             z-index: -1;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-primary), var(--neon-secondary));
+            background-size: 400%;
+            opacity: 0;
+            border-radius: 10px;
+            transition: opacity 0.3s;
         }
-
-        #player-container {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            z-index: 1;
-            border: 2px solid #00c2ff;
-            box-shadow: 0 0 20px #00c2ff, 0 0 40px rgba(0, 194, 255, 0.5);
-            box-sizing: border-box;
+        
+        .category-box:hover {
+            color: white;
+            text-shadow: 0 0 5px white;
+            transform: translateY(-3px);
+            box-shadow: var(--neon-glow-blue);
         }
-
-        video {
-            width: 100%;
-            height: 100%;
+        
+        .category-box:hover:before {
+            opacity: 1;
+            animation: animate 8s linear infinite;
+        }
+        
+        .category-box img {
+            max-width: 80%;
+            max-height: 120px;
             object-fit: contain;
+            margin-bottom: 15px;
         }
-
-        .content-wrapper {
+        
+        .category-name {
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-top: 15px;
+        }
+        
+        .featured-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #00cc44;
+            color: white;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            letter-spacing: 1px;
+        }
+        
+        /* Stream Grid */
+        .stream-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .back-button {
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid var(--neon-secondary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            width: 200px;
             position: relative;
-            width: 100%;
-            z-index: 2;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+        
+        .back-button:before {
+            content: '« ';
+        }
+        
+        .back-button:hover {
+            color: white;
+            text-shadow: 0 0 5px white;
+            transform: translateY(-3px);
+            box-shadow: var(--neon-glow-secondary);
+        }
+        
+        .stream-box {
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid var(--neon-secondary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 5px rgba(255, 0, 200, 0.3);
+            text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 100vh;
+            justify-content: center;
+            aspect-ratio: 1 / 1;
         }
-
-        .telegram-btn {
-            display: inline-block;
-            background: linear-gradient(90deg, #0088cc, #00c2ff);
-            color: white;
-            padding: 12px 28px;
-            margin: 20px 0;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 136, 204, 0.7);
-            transition: all 0.3s ease;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-        }
-
-        .telegram-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.9);
-        }
-
-        .telegram-btn i {
-            margin-right: 8px;
-        }
-
-        /* Custom scrollbar styles */
-        body::-webkit-scrollbar {
-            width: 8px;
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-
-        body::-webkit-scrollbar-thumb {
+        
+        .stream-box:before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--neon-secondary), var(--neon-blue), var(--neon-primary));
+            background-size: 400%;
+            opacity: 0;
             border-radius: 10px;
-            background-color: rgba(0, 194, 255, 0.5);
+            transition: opacity 0.3s;
         }
-
-        body::-webkit-scrollbar-thumb:hover {
-            background-color: rgba(0, 194, 255, 0.7);
+        
+        .stream-box:hover {
+            color: white;
+            text-shadow: 0 0 5px white;
+            transform: translateY(-3px);
+            box-shadow: var(--neon-glow-secondary);
         }
-
-        /* Neon pulse animation for player border */
-        @keyframes neonPulse {
+        
+        .stream-box:hover:before {
+            opacity: 1;
+            animation: animate 8s linear infinite;
+        }
+        
+        .stream-box img {
+            max-width: 80%;
+            max-height: 100px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+        
+        .stream-name {
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+        
+        @keyframes animate {
+            0% { background-position: 0 0; }
+            50% { background-position: 300% 0; }
+            100% { background-position: 0 0; }
+        }
+        
+        .watch-time-container {
+            background-color: rgba(15, 15, 15, 0.8);
+            border: 1px solid var(--neon-primary);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .watch-time-container:hover {
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+        }
+        
+        .watch-time-label {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        
+        .watch-time-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--neon-primary);
+            text-shadow: 0 0 5px var(--neon-primary);
+        }
+        
+        .section-title {
+            color: var(--neon-primary);
+            text-shadow: 0 0 5px var(--neon-primary);
+            margin: 30px 0 15px;
+            letter-spacing: 2px;
+            text-align: center;
+            font-size: 26px;
+        }
+        
+        /* Ad Space */
+        .ad-space {
+            width: 100%;
+            background-color: rgba(20, 20, 20, 0.8);
+            border: 1px solid var(--neon-blue);
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 10px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ad-space:hover {
+            box-shadow: 0 0 15px rgba(0, 195, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .ad-space a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+        }
+        
+        .ad-space img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        
+        .ad-label {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #999;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+        
+        #current-time {
+            color: var(--neon-blue);
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--neon-blue);
+            letter-spacing: 1px;
+        }
+        
+        .welcome-user {
+            display: inline-block;
+            margin-left: 15px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        /* Welcome Popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .popup-content {
+            width: 90%;
+            max-width: 400px;
+            background-color: rgba(15, 15, 15, 0.95);
+            border: 2px solid var(--neon-primary);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 102, 0.3);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .popup-title {
+            font-size: 24px;
+            color: var(--neon-primary);
+            text-shadow: var(--neon-glow);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        
+        .popup-input {
+            width: 90%;
+            padding: 14px;
+            margin: 15px 0;
+            background-color: rgba(10, 10, 10, 0.7);
+            border: 1px solid var(--neon-primary);
+            border-radius: 5px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            font-size: 16px;
+            box-shadow: 0 0 5px rgba(0, 255, 102, 0.2);
+        }
+        
+        .popup-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
+        }
+        
+        .popup-button {
+            padding: 14px 30px;
+            margin-top: 15px;
+            background-color: transparent;
+            color: var(--neon-primary);
+            border: 1px solid var(--neon-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 0 5px var(--neon-primary);
+            box-shadow: 0 0 5px rgba(0, 255, 102, 0.2);
+        }
+        
+        .popup-button:hover {
+            background-color: rgba(0, 255, 102, 0.2);
+            box-shadow: var(--neon-glow);
+            transform: translateY(-2px);
+        }
+        
+        .popup-welcome-msg {
+            color: #999;
+            margin-top: 10px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        
+        /* Loading Animation */
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid rgba(0, 255, 102, 0.3);
+            border-bottom-color: var(--neon-primary);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+        }
+        
+        @keyframes rotation {
             0% {
-                box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 15px #00c2ff, 0 0 30px rgba(0, 194, 255, 0.7);
+                transform: rotate(0deg);
             }
             100% {
-                box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5);
+                transform: rotate(360deg);
             }
         }
-
-        #player-container {
-            animation: neonPulse 3s infinite ease-in-out;
-        }
-
-        /* Loading spinner */
-        .spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(0, 194, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #00c2ff;
-            animation: spin 1s ease-in-out infinite;
-            z-index: 2;
-        }
-
-        @keyframes spin {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Error message */
-        .error-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ff3860;
-            background-color: rgba(0, 0, 0, 0.7);
+        
+        /* Broadcast Message */
+        .broadcast-container {
+            margin: 20px 0;
             padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-            max-width: 80%;
+            background-color: rgba(20, 20, 20, 0.9);
+            border-radius: 10px;
+            border: 1px solid var(--neon-primary);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+            animation: broadcastPulse 4s infinite alternate;
             display: none;
-            z-index: 3;
         }
-
-        @media (max-width: 768px) {
-            .telegram-btn {
-                padding: 10px 20px;
-                font-size: 14px;
+        
+        @keyframes broadcastPulse {
+            0% {
+                box-shadow: 0 0 5px rgba(0, 255, 102, 0.2);
             }
+            100% {
+                box-shadow: 0 0 15px rgba(0, 255, 102, 0.6);
+            }
+        }
+        
+        .broadcast-title {
+            color: var(--neon-primary);
+            text-shadow: 0 0 5px var(--neon-primary);
+            margin-top: 0;
+            font-size: 18px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .broadcast-title::before {
+            content: "📢";
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .broadcast-message {
+            color: white;
+            margin: 10px 0 0;
+            line-height: 1.5;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
-    <div id="player-container">
-        <video id="video" controls autoplay></video>
-        <div class="spinner" id="spinner"></div>
-        <div class="error-message" id="error-message"></div>
-    </div>
-    
-    <div class="content-wrapper">
-        <!-- Content area after the video if needed -->
+    <!-- Welcome Popup -->
+    <div class="popup-overlay" id="welcome-popup">
+        <div class="popup-content">
+            <h2 class="popup-title">WELCOME TO SCOOBY CRICKET HUB</h2>
+            <p>Enter your name to access premium streams</p>
+            <input type="text" id="user-name" class="popup-input" placeholder="Your Name" autocomplete="off">
+            <button class="popup-button" onclick="submitUserName()">ENTER</button>
+            <p class="popup-welcome-msg">Experience the best streaming quality!</p>
+        </div>
     </div>
 
-    <a href="#" class="telegram-btn" id="telegram-btn">
-        <i class="fab fa-telegram"></i> Join Telegram
-    </a>
+    <div class="container" id="main-content">
+        <!-- Top Ad Space -->
+        <div class="ad-space" id="top-ad">
+            <span class="ad-label">AD</span>
+            <a href="#" id="top-ad-link" target="_blank" onclick="trackAdClick('top-ad')">
+                <img src="https://i.postimg.cc/D4FJcKPY/images.png" alt="Advertisement" id="top-ad-img"/>
+            </a>
+        </div>
+        
+        <header>
+            <h1>Scooby Streaming Hub</h1>
+            <div>
+                <span id="current-time"></span>
+                <span id="welcome-message" class="welcome-user"></span>
+            </div>
+        </header>
+        
+        <!-- Broadcast Message Section -->
+        <div class="broadcast-container" id="broadcast-container">
+            <h3 class="broadcast-title">Broadcast Message</h3>
+            <p class="broadcast-message" id="broadcast-message"></p>
+        </div>
+        
+        <div class="watch-time-container">
+            <div class="watch-time-label">YOUR WATCH TIME</div>
+            <div id="watch-time" class="watch-time-value">00:00:00</div>
+        </div>
+        
+        <!-- Categories Section -->
+        <div id="categories-view">
+            <h2 class="section-title">SELECT EVENT</h2>
+            
+            <div class="loader-container" id="categories-loader">
+                <span class="loader"></span>
+            </div>
+            
+            <div class="category-grid" id="category-grid">
+                <!-- Categories will be loaded here from JSON -->
+            </div>
+        </div>
+        
+        <!-- Streams Section (Hidden by default) -->
+        <div id="streams-view" style="display: none;">
+            <div class="back-button" onclick="showCategories()">Back to Events</div>
+            <h2 class="section-title" id="selected-category-title">STREAMS</h2>
+            
+            <div class="loader-container" id="streams-loader">
+                <span class="loader"></span>
+            </div>
+            
+            <div class="stream-grid" id="stream-grid">
+                <!-- Streams will be loaded here from JSON -->
+            </div>
+        </div>
+        
+        <!-- Bottom Ad Space -->
+        <div class="ad-space" id="bottom-ad">
+            <span class="ad-label">AD</span>
+            <a href="#" id="bottom-ad-link" target="_blank" onclick="trackAdClick('bottom-ad')">
+                <img src="https://i.postimg.cc/D4FJcKPY/images.png" alt="Advertisement" id="bottom-ad-img"/>
+            </a>
+        </div>
+    </div>
 
     <script>
-        // Initialize Shaka Player
-        const manifestUri = 'https://dai.google.com/linear/hls/event/ckOnnDSqTBm1WXZQ3vTxxw/master.m3u8?hdnea=exp=1745056408~acl=*~id=zoAtJ0Ssij8xdN7NR0_35f9e982-05ae-46~data=zoAtJ0Ssij8xdN7NR0~hmac=cd1b7fe950a99ccfd482f5a1055a7a143a84e652430ed8c03eec73b3f65d8b73&';
-        const videoElement = document.getElementById('video');
-        const spinner = document.getElementById('spinner');
-        const errorMessage = document.getElementById('error-message');
+        // Telegram bot configuration
+        const TELEGRAM_BOT_TOKEN = "7285268410:AAHPfcZvpwW6b1npdFfKcG4RD3KKJ_Vzf8I";
+        const TELEGRAM_CHAT_ID = "1572380763";
 
-        // Install built-in polyfills to patch browser incompatibilities
-        shaka.polyfill.installAll();
+        // Global variables for tracking
+        let isWatching = false;
+        let watchSeconds = 0;
+        let watchTimer;
+        let userName = "";
+        let currentStreamName = "";
+        let streamStartTime = null;
+        let watchHistory = [];
+        let userMessageId = null; // Store Telegram message ID for updating
+        let liveViewers = new Set(); // Track unique viewers
+        let totalViews = 0; // Track total visits
+        let adClicks = []; // Track ad clicks
+        let externalPlayerClicks = []; // Track external player clicks
+        let categoriesData = null;
+        let streamsData = null;
+        let selectedCategory = null;
 
-        // Check to see if the browser supports the basic APIs
-        if (shaka.Player.isBrowserSupported()) {
-            // Everything looks good!
-            initPlayer();
-        } else {
-            // This browser does not have the minimum set of APIs needed to use Shaka
-            console.error('Browser not supported!');
-            showError('Browser not supported for Widevine playback.');
-        }
-
-        function initPlayer() {
-            // Create a Player instance
-            const player = new shaka.Player(videoElement);
-
-            // Listen for error events
-            player.addEventListener('error', onErrorEvent);
-
-            // Try to load a manifest
-            player.configure({
-                drm: {
-                    servers: {
-                        // No DRM keys are provided as per request
-                        'com.widevine.alpha': ''
-                    }
-                }
-            });
-
-            // Load the manifest
-            player.load(manifestUri).then(function() {
-                // This runs if the load succeeded
-                console.log('The video has now been loaded!');
-                spinner.style.display = 'none';
-            }).catch(onError);  // onError is executed if the load fails
-        }
-
-        function onErrorEvent(event) {
-            // Extract the error from the event
-            onError(event.detail);
-        }
-
-        function onError(error) {
-            // Log the error
-            console.error('Error code', error.code, 'object', error);
-            spinner.style.display = 'none';
+        // Function to get current time in Indian timezone
+        function getIndianTime() {
+            const options = {
+                timeZone: 'Asia/Kolkata',
+                hour12: true,
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            };
             
-            // Show error message
-            showError('Video playback error. Please try again later.');
+            return new Date().toLocaleString('en-US', options);
         }
 
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            spinner.style.display = 'none';
+        // Initialize user data in Telegram with a single message
+        function initializeUserData() {
+            const userAgent = navigator.userAgent;
+            const currentTime = getIndianTime();
+            const message = `🚨 New Scooby Viewer:\nName: ${userName}\nDevice: ${userAgent}\nLogin Time: ${currentTime}\n\n📺 Watch History: None\n⏱️ Total Watch Time: 00:00:00`;
+            
+            // Send message to Telegram bot and store the message ID
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        userMessageId = data.result.message_id;
+                        console.log("User data initialized in Telegram with message ID:", userMessageId);
+                    }
+                })
+                .catch(error => console.error("Error sending to Telegram:", error));
         }
 
-        // Telegram button event
-        document.getElementById('telegram-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Please Join Our Telegram Channels for links');
+        // Update user data in Telegram (single message per user)
+        function updateUserTelegramMessage() {
+            // Skip if no message ID (not initialized)
+            if (!userMessageId) return;
+            
+            // Prepare watch history summary
+            let historyText = watchHistory.length > 0 ? '\n\n📺 Watch History:' : '\n\n📺 Watch History: None';
+            
+            if (watchHistory.length > 0) {
+                watchHistory.forEach((entry, index) => {
+                    historyText += `\n${index + 1}. ${entry.stream}`;
+                    historyText += `\n   Started: ${entry.startTime}`;
+                    if (entry.endTime) {
+                        historyText += `\n   Ended: ${entry.endTime}`;
+                    } else {
+                        historyText += `\n   Status: Currently watching`;
+                    }
+                });
+            }
+            
+            // Add external player clicks if any
+            if (externalPlayerClicks.length > 0) {
+                historyText += "\n\n🔗 External Player Clicks:";
+                externalPlayerClicks.forEach((click, index) => {
+                    historyText += `\n${index + 1}. ${click.player}`;
+                    historyText += `\n   Time: ${click.time}`;
+                });
+            }
+            
+            // Add ad clicks if any
+            if (adClicks.length > 0) {
+                historyText += "\n\n📢 Ad Clicks:";
+                adClicks.forEach((click, index) => {
+                    historyText += `\n${index + 1}. ${click.ad}`;
+                    historyText += `\n   Time: ${click.time}`;
+                });
+            }
+            
+            // Calculate total watch time
+            const hours = Math.floor(watchSeconds / 3600);
+            const minutes = Math.floor((watchSeconds % 3600) / 60);
+            const seconds = watchSeconds % 60;
+            
+            const timeString = 
+                String(hours).padStart(2, '0') + ':' + 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+            
+            const currentTime = getIndianTime();
+            let statusText = currentStreamName ? `\n\n🟢 Currently watching: ${currentStreamName}` : `\n\n🔴 Not watching anything`;
+            
+            const userAgent = navigator.userAgent;
+            const message = `🚨 Scooby Viewer:\nName: ${userName}\nDevice: ${userAgent}\nLogin Time: ${currentTime}${statusText}${historyText}\n\n⏱️ Total Watch Time: ${timeString}`;
+            
+            // Update the existing message instead of sending a new one
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageText?chat_id=${TELEGRAM_CHAT_ID}&message_id=${userMessageId}&text=${encodeURIComponent(message)}`;
+            
+            fetch(url)
+                .catch(error => console.error("Error updating Telegram message:", error));
+        }
+
+        // Track external player clicks
+        function trackExternalPlayer(playerName, streamUrl) {
+            if (!userName) {
+                alert("Please enter your name first to access streams.");
+                document.getElementById('welcome-popup').style.display = 'flex';
+                return false;
+            }
+            
+            // Record external player click
+            const click = {
+                player: playerName,
+                time: getIndianTime()
+            };
+            
+            externalPlayerClicks.push(click);
+            
+            // Record stream start
+            recordStreamStart(playerName);
+            
+            // Update user data in Telegram
+            updateUserTelegramMessage();
+            
+            // Open the stream in a new tab
+            window.open(streamUrl, '_blank');
+            
+            return true;
+        }
+
+        // Track ad clicks
+        function trackAdClick(adId) {
+            if (userName) {
+                const click = {
+                    ad: adId,
+                    time: getIndianTime()
+                };
+                
+                adClicks.push(click);
+                
+                // Update user data in Telegram
+                updateUserTelegramMessage();
+            }
+            return true; // Allow the click to continue
+        }
+
+        // Record stream start in watch history
+        function recordStreamStart(streamName) {
+            if (currentStreamName) {
+                // End previous stream if any
+                recordStreamEnd();
+            }
+            
+            currentStreamName = streamName;
+            streamStartTime = getIndianTime();
+            
+            // Add to watch history
+            watchHistory.push({
+                stream: streamName,
+                startTime: streamStartTime,
+                endTime: null
+            });
+            
+            // Start watch timer if not already running
+            if (!isWatching) {
+                isWatching = true;
+                startWatchTimer();
+            }
+        }
+
+        // Record stream end in watch history
+        function recordStreamEnd() {
+            if (!currentStreamName) return;
+            
+            const endTime = getIndianTime();
+            
+            // Update the last entry in watch history
+            if (watchHistory.length > 0) {
+                const lastEntry = watchHistory[watchHistory.length - 1];
+                if (lastEntry.stream === currentStreamName) {
+                    lastEntry.endTime = endTime;
+                }
+            }
+            
+            currentStreamName = "";
+            streamStartTime = null;
+            
+            // Stop watch timer
+            isWatching = false;
+            clearInterval(watchTimer);
+            
+            // Update user data in Telegram
+            updateUserTelegramMessage();
+        }
+
+        // Start watch timer
+        function startWatchTimer() {
+            watchTimer = setInterval(() => {
+                watchSeconds++;
+                updateWatchTimeDisplay();
+                
+                // Update Telegram data every 5 minutes (300 seconds)
+                if (watchSeconds % 300 === 0) {
+                    updateUserTelegramMessage();
+                }
+            }, 1000);
+        }
+
+        // Update watch time display
+        function updateWatchTimeDisplay() {
+            const hours = Math.floor(watchSeconds / 3600);
+            const minutes = Math.floor((watchSeconds % 3600) / 60);
+            const seconds = watchSeconds % 60;
+            
+            const timeString = 
+                String(hours).padStart(2, '0') + ':' + 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+            
+            document.getElementById('watch-time').textContent = timeString;
+        }
+
+        // Handle user name submission
+        function submitUserName() {
+            const nameInput = document.getElementById('user-name');
+            userName = nameInput.value.trim();
+            
+            if (userName.length < 2) {
+                alert("Please enter a valid name (at least 2 characters).");
+                return;
+            }
+            
+            // Hide the popup
+            document.getElementById('welcome-popup').style.display = 'none';
+            
+            // Show the main content
+            document.getElementById('main-content').style.display = 'block';
+            
+            // Set welcome message
+            document.getElementById('welcome-message').textContent = `Welcome, ${userName}!`;
+            
+            // Initialize user data in Telegram
+            initializeUserData();
+            
+            // Track visit
+            totalViews++;
+            liveViewers.add(userName);
+            
+            // Load categories
+            loadCategories();
+            
+            // Load ads
+            loadRandomAds();
+            
+            // Start clock update
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            // Check for broadcasts
+            checkForBroadcasts();
+        }
+
+        // Update the clock
+        function updateClock() {
+            const now = new Date();
+            const options = {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            };
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('en-US', options);
+        }
+
+        // Load categories
+        function loadCategories() {
+            // Show loader
+            document.getElementById('categories-loader').style.display = 'flex';
+            document.getElementById('category-grid').innerHTML = '';
+            
+            // Fetch categories from JSON file
+            fetch('https://raw.githubusercontent.com/scoobyff/jsondrm/main/categories.json')
+                .then(response => response.json())
+                .then(data => {
+                    categoriesData = data;
+                    renderCategories();
+                    // Hide loader
+                    document.getElementById('categories-loader').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error("Error loading categories:", error);
+                    // If fetch fails, use fallback categories
+                    categoriesData = getFallbackCategories();
+                    renderCategories();
+                    // Hide loader
+                    document.getElementById('categories-loader').style.display = 'none';
+                });
+        }
+
+        // Get fallback categories if JSON fetch fails
+        function getFallbackCategories() {
+            return {
+                "categories": [
+                    {
+                        "id": "cricket",
+                        "name": "Cricket",
+                        "image": "https://i.postimg.cc/8znvZ54L/cricket-ball.png",
+                        "featured": true
+                    },
+                    {
+                        "id": "football",
+                        "name": "Football",
+                        "image": "https://i.postimg.cc/RVc10x1M/football.png",
+                        "featured": false
+                    },
+                    {
+                        "id": "tennis",
+                        "name": "Tennis",
+                        "image": "https://i.postimg.cc/hj4B5jdH/tennis-ball.png",
+                        "featured": false
+                    },
+                    {
+                        "id": "basketball",
+                        "name": "Basketball",
+                        "image": "https://i.postimg.cc/DzM99qWn/basketball.png",
+                        "featured": false
+                    }
+                ]
+            };
+        }
+
+        // Render categories
+        function renderCategories() {
+            const categoryGrid = document.getElementById('category-grid');
+            categoryGrid.innerHTML = '';
+            
+            categoriesData.categories.forEach(category => {
+                const categoryBox = document.createElement('div');
+                categoryBox.className = 'category-box';
+                categoryBox.setAttribute('data-id', category.id);
+                categoryBox.onclick = function() { loadStreams(category.id, category.name); };
+                
+                // Add featured tag if applicable
+                if (category.featured) {
+                    const featuredTag = document.createElement('div');
+                    featuredTag.className = 'featured-tag';
+                    featuredTag.textContent = 'FEATURED';
+                    categoryBox.appendChild(featuredTag);
+                }
+                
+                // Add category image
+                const img = document.createElement('img');
+                img.src = category.image;
+                img.alt = category.name;
+                categoryBox.appendChild(img);
+                
+                // Add category name
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'category-name';
+                nameDiv.textContent = category.name;
+                categoryBox.appendChild(nameDiv);
+                
+                categoryGrid.appendChild(categoryBox);
+            });
+        }
+
+        // Load streams for a selected category
+        function loadStreams(categoryId, categoryName) {
+            if (!userName) {
+                alert("Please enter your name first to access streams.");
+                document.getElementById('welcome-popup').style.display = 'flex';
+                return;
+            }
+            
+            selectedCategory = categoryId;
+            document.getElementById('selected-category-title').textContent = categoryName.toUpperCase() + " STREAMS";
+            
+            // Show loader
+            document.getElementById('streams-loader').style.display = 'flex';
+            document.getElementById('stream-grid').innerHTML = '';
+            
+            // Hide categories, show streams
+            document.getElementById('categories-view').style.display = 'none';
+            document.getElementById('streams-view').style.display = 'block';
+            
+            // Fetch streams from JSON file
+            fetch('https://raw.githubusercontent.com/scoobyff/jsondrm/main/stream.json')
+                .then(response => response.json())
+                .then(data => {
+                    streamsData = data;
+                    renderStreams(categoryId);
+                    // Hide loader
+                    document.getElementById('streams-loader').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error("Error loading streams:", error);
+                    // If fetch fails, use fallback streams
+                    streamsData = getFallbackStreams();
+                    renderStreams(categoryId);
+                    // Hide loader
+                    document.getElementById('streams-loader').style.display = 'none';
+                });
+        }
+
+        // Get fallback streams if JSON fetch fails
+        function getFallbackStreams() {
+            return {
+                "streams": [
+                    {
+                        "id": "cricket_stream1",
+                        "category": "cricket",
+                        "name": "India vs Australia",
+                        "image": "https://i.postimg.cc/8znvZ54L/cricket-ball.png",
+                        "players": [
+                            { "name": "Web Player", "url": "https://example.com/stream/cricket1" },
+                            { "name": "VLC Player", "url": "https://example.com/stream/cricket1.m3u8" }
+                        ]
+                    },
+                    {
+                        "id": "cricket_stream2",
+                        "category": "cricket",
+                        "name": "England vs New Zealand",
+                        "image": "https://i.postimg.cc/8znvZ54L/cricket-ball.png",
+                        "players": [
+                            { "name": "Web Player", "url": "https://example.com/stream/cricket2" },
+                            { "name": "VLC Player", "url": "https://example.com/stream/cricket2.m3u8" }
+                        ]
+                    },
+                    {
+                        "id": "football_stream1",
+                        "category": "football",
+                        "name": "Manchester United vs Liverpool",
+                        "image": "https://i.postimg.cc/RVc10x1M/football.png",
+                        "players": [
+                            { "name": "Web Player", "url": "https://example.com/stream/football1" }
+                        ]
+                    }
+                ]
+            };
+        }
+
+        // Render streams for the selected category
+        function renderStreams(categoryId) {
+            const streamGrid = document.getElementById('stream-grid');
+            streamGrid.innerHTML = '';
+            
+            // Filter streams by category
+            const categoryStreams = streamsData.streams.filter(stream => 
+                stream.category === categoryId
+            );
+            
+            if (categoryStreams.length === 0) {
+                streamGrid.innerHTML = '<p style="text-align: center; width: 100%; color: #ccc;">No streams available for this category at the moment.</p>';
+                return;
+            }
+            
+            categoryStreams.forEach(stream => {
+                const streamBox = document.createElement('div');
+                streamBox.className = 'stream-box';
+                streamBox.setAttribute('data-id', stream.id);
+                streamBox.onclick = function() { showStreamOptions(stream); };
+                
+                // Add stream image
+                const img = document.createElement('img');
+                img.src = stream.image;
+                img.alt = stream.name;
+                streamBox.appendChild(img);
+                
+                // Add stream name
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'stream-name';
+                nameDiv.textContent = stream.name;
+                streamBox.appendChild(nameDiv);
+                
+                streamGrid.appendChild(streamBox);
+            });
+        }
+
+        // Show stream options (player choices)
+        function showStreamOptions(stream) {
+            let playerOptions = "Select a player to watch " + stream.name + ":\n\n";
+            
+            stream.players.forEach((player, index) => {
+                playerOptions += (index + 1) + ". " + player.name + "\n";
+            });
+            
+            // Show player selection dialog
+            const playerChoice = prompt(playerOptions, "1");
+            
+            if (playerChoice !== null) {
+                const playerIndex = parseInt(playerChoice) - 1;
+                
+                if (playerIndex >= 0 && playerIndex < stream.players.length) {
+                    const player = stream.players[playerIndex];
+                    trackExternalPlayer(stream.name + " (" + player.name + ")", player.url);
+                } else {
+                    alert("Invalid selection. Please try again.");
+                }
+            }
+        }
+
+        // Show categories view
+        function showCategories() {
+            document.getElementById('categories-view').style.display = 'block';
+            document.getElementById('streams-view').style.display = 'none';
+        }
+
+        // Load random ads
+        function loadRandomAds() {
+            const ads = [
+                {
+                    image: "https://i.postimg.cc/D4FJcKPY/images.png",
+                    link: "https://example.com/ad1"
+                },
+                {
+                    image: "https://i.postimg.cc/wjPPm98M/download.png",
+                    link: "https://example.com/ad2"
+                },
+                {
+                    image: "https://i.postimg.cc/hGmPjskN/ad.png",
+                    link: "https://example.com/ad3"
+                }
+            ];
+            
+            // Randomly select top ad
+            const topAdIndex = Math.floor(Math.random() * ads.length);
+            document.getElementById('top-ad-img').src = ads[topAdIndex].image;
+            document.getElementById('top-ad-link').href = ads[topAdIndex].link;
+            
+            // Randomly select bottom ad (different from top)
+            let bottomAdIndex;
+            do {
+                bottomAdIndex = Math.floor(Math.random() * ads.length);
+            } while (bottomAdIndex === topAdIndex);
+            
+            document.getElementById('bottom-ad-img').src = ads[bottomAdIndex].image;
+            document.getElementById('bottom-ad-link').href = ads[bottomAdIndex].link;
+        }
+
+        // Check for broadcasts
+        function checkForBroadcasts() {
+            // This would typically fetch from a server
+            // For demo purposes, we'll use a hardcoded broadcast
+            const hasBroadcast = Math.random() > 0.5; // 50% chance to show broadcast
+            
+            if (hasBroadcast) {
+                const broadcastContainer = document.getElementById('broadcast-container');
+                const broadcastMessage = document.getElementById('broadcast-message');
+                
+                broadcastMessage.textContent = "🏏 New cricket match added! India vs. Pakistan T20 is now available. Check it out in the Cricket section!";
+                broadcastContainer.style.display = 'block';
+                
+                // Auto-hide after 20 seconds
+                setTimeout(() => {
+                    broadcastContainer.style.display = 'none';
+                }, 20000);
+            }
+        }
+
+        // Check if user has previously entered name (for future visits)
+        function checkStoredUser() {
+            const storedName = localStorage.getItem('scoobyhub_username');
+            if (storedName) {
+                document.getElementById('user-name').value = storedName;
+                // Auto submit after slight delay
+                setTimeout(() => {
+                    submitUserName();
+                }, 500);
+            }
+        }
+
+        // Window unload event - record end of session
+        window.addEventListener('beforeunload', function() {
+            // End current stream if any
+            if (currentStreamName) {
+                recordStreamEnd();
+            }
+            
+            // Remove from live viewers
+            liveViewers.delete(userName);
+            
+            // Update user data in Telegram one last time
+            updateUserTelegramMessage();
         });
+
+        // Initialize when page loads
+        window.onload = function() {
+            // Wait for animations to complete
+            setTimeout(() => {
+                checkStoredUser();
+            }, 1000);
+        };
     </script>
 </body>
-
 </html>
+
+                
