@@ -2,23 +2,24 @@
 <html>
 <head>
   <title>KeyID:Key Decoder</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, textarea { width: 100%; padding: 10px; margin-top: 10px; }
+    button { padding: 10px 15px; margin-top: 10px; }
+    pre { background: #f0f0f0; padding: 10px; }
+  </style>
 </head>
 <body>
-  <h2>Base64URL Key Decoder</h2>
-  <label>k (key):</label><br>
-  <input type="text" id="k" size="50"><br><br>
-
-  <label>kid (key ID):</label><br>
-  <input type="text" id="kid" size="50"><br><br>
-
+  <h2>KeyID:Key Decoder</h2>
+  <textarea id="input" rows="6" placeholder='Paste your full message here...'></textarea>
   <button onclick="decode()">Decode</button>
+  <button onclick="copyOutput()">Copy</button>
 
   <h3>Output:</h3>
   <pre id="output"></pre>
 
   <script>
     function base64urlToHex(b64url) {
-      // Convert to standard base64
       let b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
       while (b64.length % 4) b64 += '=';
       let binary = atob(b64);
@@ -30,13 +31,26 @@
     }
 
     function decode() {
-      const k = document.getElementById('k').value.trim();
-      const kid = document.getElementById('kid').value.trim();
+      const input = document.getElementById('input').value;
+      const kMatch = input.match(/"k"\s*:\s*"([^"]+)"/);
+      const kidMatch = input.match(/"kid"\s*:\s*"([^"]+)"/);
 
-      const kHex = base64urlToHex(k);
-      const kidHex = base64urlToHex(kid);
+      if (!kMatch || !kidMatch) {
+        document.getElementById('output').textContent = 'Error: Could not find both "k" and "kid" in the input.';
+        return;
+      }
+
+      const kHex = base64urlToHex(kMatch[1]);
+      const kidHex = base64urlToHex(kidMatch[1]);
 
       document.getElementById('output').textContent = `${kidHex}:${kHex}`;
+    }
+
+    function copyOutput() {
+      const output = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(output).then(() => {
+        alert('Copied to clipboard!');
+      });
     }
   </script>
 </body>
