@@ -165,7 +165,7 @@
             <div>Loading stream...</div>
         </div>
     </div>
-    
+
     <div class="content-wrapper">
         <!-- Content area after the video if needed -->
     </div>
@@ -177,16 +177,16 @@
     <script type="text/javascript">
         // Initialize JW Player key
         jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
-        
+
         // GitHub raw JSON URL
         const configUrl = 'https://raw.githubusercontent.com/scoobyff/jsondrm/main/data.json';
-        
+
         // Function to load stream configuration from GitHub JSON
         async function loadStreamConfig() {
             try {
                 // Show loading indicator
                 document.getElementById('loading-indicator').style.display = 'block';
-                
+
                 // Fetch the stream config from the GitHub raw URL
                 // Adding cache-busting parameter to avoid caching issues
                 const timestamp = new Date().getTime();
@@ -196,37 +196,37 @@
                         'Accept': 'application/json'
                     }
                 });
-                
+
                 if (!response.ok) {
                     throw new Error('Failed to load stream configuration');
                 }
-                
+
                 const config = await response.json();
-                
+
                 // Hide loading indicator
                 document.getElementById('loading-indicator').style.display = 'none';
-                
+
                 return config;
             } catch (error) {
                 console.error('Error loading stream configuration:', error);
-                
+
                 // Show error message in loading indicator
                 const loadingIndicator = document.getElementById('loading-indicator');
                 loadingIndicator.innerHTML = `<div>Error loading stream. Please try again later.</div>`;
-                
+
                 return null;
             }
         }
-        
+
         // Setup player with configuration from JSON
         async function setupPlayer() {
             const streamConfig = await loadStreamConfig();
-            
+
             if (!streamConfig) {
                 console.error('Failed to initialize player: Stream configuration not available');
                 return;
             }
-            
+
             jwplayer("player-container").setup({
                 file: streamConfig.streamUrl,
                 aspectratio: '16:9',
@@ -251,14 +251,14 @@
                 displaytitle: true,
                 displaydescription: true
             });
-            
+
             // Force controls to be visible and fix player size
             jwplayer().on('ready', function () {
                 const playerElement = document.querySelector('#player-container');
                 if (playerElement) {
                     playerElement.style.height = '100vh';
                 }
-                
+
                 // Set a timeout to ensure controls are visible after initialization
                 setTimeout(function() {
                     const jwControls = document.querySelector('.jw-controls');
@@ -277,7 +277,7 @@
 
             jwplayer().on('error', function (e) {
                 console.error("Playback error:", e.message);
-                
+
                 // Show error message in player container
                 const playerContainer = document.getElementById('player-container');
                 playerContainer.innerHTML = `
@@ -291,8 +291,30 @@
                     </div>
                 `;
             });
+
+            // Set up Telegram button with the URL from the JSON config
+            setupTelegramButton(streamConfig);
         }
-        
+
+        // Function to set up the Telegram button using the URL from JSON
+        function setupTelegramButton(streamConfig) {
+            const telegramBtn = document.getElementById('telegram-btn');
+            
+            if (streamConfig && streamConfig.telegramUrl) {
+                telegramBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Open the Telegram URL from the JSON config
+                    window.open(streamConfig.telegramUrl, '_blank');
+                });
+            } else {
+                // Fallback if no Telegram URL is provided in the JSON
+                telegramBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Please Join Our Telegram Channels for links');
+                });
+            }
+        }
+
         // Start player setup
         setupPlayer();
 
@@ -304,13 +326,6 @@
                 jwControls.style.visibility = 'visible';
                 jwControls.style.pointerEvents = 'auto';
             }
-        });
-
-        // Telegram button event handler
-        document.getElementById('telegram-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            // Replace with your actual Telegram link handling
-            alert('Please Join Our Telegram Channels for links');
         });
     </script>
 </body>
