@@ -990,7 +990,7 @@
             document.getElementById('streams-view').style.display = 'block';
             
             // Fetch streams from JSON file
-            fetch('https://raw.githubusercontent.com/scoobyff/jsondrm/main/stream.json')
+            fetch('https://raw.githubusercontent.com/scoobyff/jsondrm/main/streams.json')
                 .then(response => response.json())
                 .then(data => {
                     streamsData = data;
