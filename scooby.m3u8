@@ -1,0 +1,6 @@
+#EXTM3U
+#EXTINF:-1,Fancode Stream
+https://dai-partner.fancode.com:443/linear/hls/pb/event/Ei8BfVkgS_-6Iock4AfRkw/stream/70526c22-a4c7-4d70-9bc3-8eb65bfda38f:TPE/variant/0f7873ae2750a4f8e097f2840315447b/bandwidth/3289416.m3u8
+
+#EXTINF:-1,Google DAI Stream
+https://dai.google.com/linear/hls/event/Ei8BfVkgS_-6Iock4AfRkw/master.m3u8?hdnea=exp=1745735240~acl=*~id=1698848813001_19b9e045-30d4-4c~data=1698848813001~hmac=d8c3c2b22b1066dc8de3dd6898ffbf6879d03d7bf8df1bd6a720bdb5a51ddc4f
