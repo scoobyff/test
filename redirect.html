@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://ssl.p.jwpcdn.com/player/v/8.32.1/jwplayer.js" type="text/javascript"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player</title>
+    <style>
+        /* SAME STYLES from astro.html */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            color: #fff;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #000000, #0a0a0a);
+            z-index: -1;
+        }
+        #player-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+            border: 2px solid #00c2ff;
+            box-shadow: 0 0 20px #00c2ff, 0 0 40px rgba(0, 194, 255, 0.5);
+            box-sizing: border-box;
+            animation: neonPulse 3s infinite ease-in-out;
+        }
+        .content-wrapper {
+            position: relative;
+            width: 100%;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 100vh;
+        }
+        .telegram-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #0088cc, #00c2ff);
+            color: white;
+            padding: 12px 28px;
+            margin: 20px 0;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 136, 204, 0.7);
+            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        .telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.9);
+        }
+        .telegram-btn i {
+            margin-right: 8px;
+        }
+        .jw-state-idle .jw-controls,
+        .jwplayer .jw-controls {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+        @keyframes neonPulse {
+            0% { box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5); }
+            50% { box-shadow: 0 0 15px #00c2ff, 0 0 30px rgba(0, 194, 255, 0.7); }
+            100% { box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5); }
+        }
+        @media (max-width: 768px) {
+            .telegram-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="player-container"></div>
+    
+    <div class="content-wrapper">
+        <!-- Empty for now -->
+    </div>
+
+    <a href="https://t.me/+o3xpHLNH5nNkOTJl" class="telegram-btn" id="telegram-btn" target="_blank">
+        <i class="fab fa-telegram"></i> Join Telegram
+    </a>
+
+    <script type="text/javascript">
+        // Function to get video URL from ?url=
+        function getVideoUrlFromDomain() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('url');
+        }
+
+        jwplayer.key = ''; // optional key, you can set if needed
+
+        jwplayer("player-container").setup({
+            file: getVideoUrlFromDomain(),
+            aspectratio: '16:9',
+            width: '100%',
+            height: '100%',
+            autostart: true,
+            mute: false,
+            stretching: 'uniform',
+            controls: true,
+            displaytitle: false,
+            displaydescription: false
+        });
+
+        // Force controls to appear
+        jwplayer().on('ready', function () {
+            const playerElement = document.querySelector('#player-container');
+            if (playerElement) {
+                playerElement.style.height = '100vh';
+            }
+            setTimeout(function () {
+                const jwControls = document.querySelector('.jw-controls');
+                if (jwControls) {
+                    jwControls.style.opacity = '1';
+                    jwControls.style.visibility = 'visible';
+                    jwControls.style.pointerEvents = 'auto';
+                }
+            }, 1000);
+        });
+
+        jwplayer().on('play', function () {
+            document.body.style.backgroundColor = "#000";
+        });
+
+        document.addEventListener('click', function () {
+            const jwControls = document.querySelector('.jw-controls');
+            if (jwControls) {
+                jwControls.style.opacity = '1';
+                jwControls.style.visibility = 'visible';
+                jwControls.style.pointerEvents = 'auto';
+            }
+        });
+
+        jwplayer().on('error', function (e) {
+            console.error("Playback error:", e.message);
+        });
+    </script>
+
+    <script disable-devtool-auto src="https://cdn.jsdelivr.net/npm/disable-devtool@latest"></script>
+</body>
+</html>
