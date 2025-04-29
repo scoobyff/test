@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <script src="https://ssl.p.jwpcdn.com/player/v/8.32.1/jwplayer.js" type="text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
+    <title>Clean Player</title>
     <style>
         body {
             margin: 0;
@@ -31,15 +30,22 @@
             background: linear-gradient(45deg, #000000, #0a0a0a);
             z-index: -1;
         }
+        #player-wrapper {
+            width: 100%;
+            max-width: 1280px; /* For 16:9 ratio control */
+            margin: 0 auto;
+            position: relative;
+        }
         #player-container {
             width: 100%;
-            height: 100vh;
             position: relative;
             z-index: 1;
             border: 2px solid #00c2ff;
             box-shadow: 0 0 20px #00c2ff, 0 0 40px rgba(0, 194, 255, 0.5);
             box-sizing: border-box;
             animation: neonPulse 3s infinite ease-in-out;
+            /* 16:9 ratio container setup */
+            aspect-ratio: 16/9;
         }
         .content-wrapper {
             position: relative;
@@ -48,7 +54,40 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 100vh;
+            margin-top: 20px;
+        }
+        .telegram-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #0088cc, #00c2ff);
+            color: white;
+            padding: 12px 28px;
+            margin: 20px 0;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 136, 204, 0.7);
+            transition: all 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        .telegram-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.9);
+        }
+        .telegram-btn i {
+            margin-right: 8px;
+        }
+        .jw-state-idle .jw-controls,
+        .jwplayer .jw-controls {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
         }
         .quality-selector {
             margin-top: 10px;
@@ -59,22 +98,11 @@
             border: 1px solid #555;
             border-radius: 5px;
             cursor: pointer;
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            z-index: 100;
         }
         .error-message {
             color: red;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 5px;
-            z-index: 1000;
-            display: none;
+            margin-top: 10px;
+            text-align: center;
         }
         @keyframes neonPulse {
             0% { box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5); }
@@ -82,9 +110,9 @@
             100% { box-shadow: 0 0 10px #00c2ff, 0 0 20px rgba(0, 194, 255, 0.5); }
         }
         @media (max-width: 768px) {
-            .quality-selector {
-                bottom: 70px;
-                left: 10px;
+            .telegram-btn {
+                padding: 10px 20px;
+                font-size: 14px;
             }
         }
     </style>
@@ -92,110 +120,41 @@
 </head>
 
 <body>
-    <div id="player-container">
-        <video id="videoPlayer" autoplay controls></video>
+    <div id="player-wrapper">
+        <div id="player-container"></div>
         <select id="qualitySelector" class="quality-selector" style="display: none;"></select>
-        <p id="errorMessage" class="error-message">Error: Unable to play this stream!</p>
+        <p id="errorMessage" class="error-message" style="display: none;">Error: Unable to play this stream!</p>
     </div>
     
     <div class="content-wrapper">
         <!-- Empty for now -->
     </div>
 
+    <a href="https://t.me/+o3xpHLNH5nNkOTJl" class="telegram-btn" id="telegram-btn" target="_blank">
+        <i class="fab fa-telegram"></i> Join Telegram
+    </a>
+
+    <!-- HLS.js for HLS support -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0"></script>
+    
     <script>
-        // Get video element and other references
-        const video = document.getElementById('videoPlayer');
+        // Function to get video URL from ?url= parameter
+        function getVideoUrlFromParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('url');
+        }
+
+        const streamUrl = getVideoUrlFromParams();
+        const video = document.getElementById('player-container');
         const errorMessage = document.getElementById('errorMessage');
         const qualitySelector = document.getElementById('qualitySelector');
-        
-        // Get URL parameters - using url instead of stream
-        const urlParams = new URLSearchParams(window.location.search);
-        const streamUrl = urlParams.get('url');
 
-        // If stream URL is provided
+        // Process based on URL parameter availability
         if (streamUrl) {
-            // Check if HLS.js is supported
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(streamUrl);
-                hls.attachMedia(video);
-                
-                // Handle manifest parsed event for quality selector
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    const levels = hls.levels;
-                    qualitySelector.style.display = 'block';
-                    
-                    // Add auto quality option
-                    const autoOption = document.createElement('option');
-                    autoOption.value = -1;
-                    autoOption.textContent = 'Auto';
-                    qualitySelector.appendChild(autoOption);
-                    
-                    // Add all available quality options
-                    levels.forEach((level, index) => {
-                        const option = document.createElement('option');
-                        option.value = index;
-                        option.textContent = level.height ? level.height + 'p' : 'Level ' + (index + 1);
-                        qualitySelector.appendChild(option);
-                    });
-                    
-                    // Handle quality change event
-                    qualitySelector.addEventListener('change', event => {
-                        const qualityLevel = parseInt(event.target.value, 10);
-                        hls.currentLevel = qualityLevel;
-                    });
-                    
-                    // Set default quality to auto
-                    hls.currentLevel = -1;
-                });
-                
-                // Handle errors
-                hls.on(Hls.Events.ERROR, (event, data) => {
-                    if (data.fatal) {
-                        errorMessage.style.display = 'block';
-                    }
-                });
-                
-                // Handle media attached event
-                hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-                    video.play().catch(() => {
-                        console.warn('Autoplay failed. User interaction required.');
-                    });
-                });
-            }
-            // Fallback for browsers that support HLS natively (Safari)
-            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = streamUrl;
-                video.play().catch(() => {
-                    console.warn('Autoplay failed. User interaction required.');
-                });
-                
-                video.addEventListener('error', () => {
-                    errorMessage.style.display = 'block';
-                });
-            }
-            // Not supported at all
-            else {
-                errorMessage.textContent = 'Error: HLS is not supported in this browser.';
-                errorMessage.style.display = 'block';
-            }
-        }
-        // No stream URL provided
-        else {
-            errorMessage.textContent = 'Error: No video URL provided!';
-            errorMessage.style.display = 'block';
-        }
-        
-        // Initialize JW Player as a fallback if HLS.js fails
-        function initJWPlayer() {
-            if (!streamUrl) return;
+            // Method 1: Use JWPlayer if available
+            if (typeof jwplayer === 'function') {
+                jwplayer.key = ''; // optional key, you can set if needed
 
-            // Only initialize JW Player if HLS.js fails or is not supported
-            if (!Hls.isSupported() || document.getElementById('errorMessage').style.display === 'block') {
-                // Hide the video element
-                document.getElementById('videoPlayer').style.display = 'none';
-                
                 jwplayer("player-container").setup({
                     file: streamUrl,
                     aspectratio: '16:9',
@@ -211,10 +170,6 @@
 
                 // Force controls to appear
                 jwplayer().on('ready', function () {
-                    const playerElement = document.querySelector('#player-container');
-                    if (playerElement) {
-                        playerElement.style.height = '100vh';
-                    }
                     setTimeout(function () {
                         const jwControls = document.querySelector('.jw-controls');
                         if (jwControls) {
@@ -225,30 +180,91 @@
                     }, 1000);
                 });
 
-                jwplayer().on('play', function () {
-                    document.body.style.backgroundColor = "#000";
-                });
-
                 jwplayer().on('error', function (e) {
                     console.error("Playback error:", e.message);
-                    errorMessage.textContent = "Error: Unable to play this video!";
+                    errorMessage.textContent = "Error: " + e.message;
+                    errorMessage.style.display = "block";
+                });
+            } 
+            // Method 2: Use HLS.js if JWPlayer isn't available
+            else if (Hls.isSupported()) {
+                // Create HTML5 video element since we're not using JWPlayer
+                const videoElement = document.createElement('video');
+                videoElement.id = 'videoPlayer';
+                videoElement.controls = true;
+                videoElement.autoplay = true;
+                videoElement.style.width = '100%';
+                videoElement.style.height = '100%';
+                video.appendChild(videoElement);
+                
+                const hls = new Hls();
+                hls.loadSource(streamUrl);
+                hls.attachMedia(videoElement);
+                
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    const levels = hls.levels;
+                    qualitySelector.style.display = "inline-block";
+                    
+                    const autoOption = document.createElement('option');
+                    autoOption.value = -1;
+                    autoOption.textContent = "Auto";
+                    qualitySelector.appendChild(autoOption);
+                    
+                    levels.forEach((level, index) => {
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.textContent = level.height ? level.height + 'p' : 'Level ' + (index + 1);
+                        qualitySelector.appendChild(option);
+                    });
+                    
+                    qualitySelector.addEventListener('change', event => {
+                        const levelValue = parseInt(event.target.value, 10);
+                        hls.currentLevel = levelValue;
+                    });
+                    
+                    hls.currentLevel = -1;
+                });
+                
+                hls.on(Hls.Events.ERROR, (event, data) => {
+                    if (data.fatal) {
+                        errorMessage.style.display = "block";
+                    }
+                });
+                
+                hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+                    videoElement.play().catch(() => {
+                        console.warn("Autoplay failed. User interaction required.");
+                    });
+                });
+            }
+            // Method 3: Try native HLS support
+            else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+                const videoElement = document.createElement('video');
+                videoElement.id = 'videoPlayer';
+                videoElement.controls = true;
+                videoElement.autoplay = true;
+                videoElement.style.width = '100%';
+                videoElement.style.height = '100%';
+                video.appendChild(videoElement);
+                
+                videoElement.src = streamUrl;
+                videoElement.play().catch(() => {
+                    console.warn("Autoplay failed. User interaction required.");
+                });
+                
+                videoElement.addEventListener('error', () => {
                     errorMessage.style.display = "block";
                 });
             }
-        }
-
-        // Attempt to initialize JW Player after a short delay to allow HLS.js to try first
-        setTimeout(initJWPlayer, 2000);
-
-        // Handle document clicks for JW Player controls
-        document.addEventListener('click', function () {
-            const jwControls = document.querySelector('.jw-controls');
-            if (jwControls) {
-                jwControls.style.opacity = '1';
-                jwControls.style.visibility = 'visible';
-                jwControls.style.pointerEvents = 'auto';
+            // No supported method
+            else {
+                errorMessage.textContent = "Error: HLS is not supported in this browser.";
+                errorMessage.style.display = "block";
             }
-        });
+        } else {
+            errorMessage.textContent = "Error: No stream URL provided!";
+            errorMessage.style.display = "block";
+        }
     </script>
 </body>
 </html>
