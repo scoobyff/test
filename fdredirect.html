@@ -4,7 +4,7 @@
     <script src="https://ssl.p.jwpcdn.com/player/v/8.32.1/jwplayer.js" type="text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clean Player</title>
+    <title>Scooby Player</title>
     <style>
         body {
             margin: 0;
@@ -32,11 +32,11 @@
         }
         #player-wrapper {
             width: 100%;
-            max-width: 1280px; /* For 16:9 ratio control */
+            max-width: 1280px; /* For better control of aspect ratio */
             margin: 0 auto;
             position: relative;
         }
-        #player-container {
+        .player-container {
             width: 100%;
             position: relative;
             z-index: 1;
@@ -44,8 +44,15 @@
             box-shadow: 0 0 20px #00c2ff, 0 0 40px rgba(0, 194, 255, 0.5);
             box-sizing: border-box;
             animation: neonPulse 3s infinite ease-in-out;
-            /* 16:9 ratio container setup */
+            /* 16:9 aspect ratio */
             aspect-ratio: 16/9;
+            background: #000;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: block;
         }
         .content-wrapper {
             position: relative;
@@ -83,12 +90,6 @@
         .telegram-btn i {
             margin-right: 8px;
         }
-        .jw-state-idle .jw-controls,
-        .jwplayer .jw-controls {
-            opacity: 1 !important;
-            visibility: visible !important;
-            pointer-events: auto !important;
-        }
         .quality-selector {
             margin-top: 10px;
             padding: 10px;
@@ -121,9 +122,11 @@
 
 <body>
     <div id="player-wrapper">
-        <div id="player-container"></div>
-        <select id="qualitySelector" class="quality-selector" style="display: none;"></select>
-        <p id="errorMessage" class="error-message" style="display: none;">Error: Unable to play this stream!</p>
+        <div class="player-container">
+            <video id="videoPlayer" autoplay controls></video>
+            <select id="qualitySelector" class="quality-selector" style="display: none;"></select>
+            <p id="errorMessage" class="error-message" style="display: none;">Error: Unable to play this stream!</p>
+        </div>
     </div>
     
     <div class="content-wrapper">
@@ -138,133 +141,60 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0"></script>
     
     <script>
-        // Function to get video URL from ?url= parameter
-        function getVideoUrlFromParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('url');
-        }
-
-        const streamUrl = getVideoUrlFromParams();
-        const video = document.getElementById('player-container');
-        const errorMessage = document.getElementById('errorMessage');
-        const qualitySelector = document.getElementById('qualitySelector');
-
-        // Process based on URL parameter availability
-        if (streamUrl) {
-            // Method 1: Use JWPlayer if available
-            if (typeof jwplayer === 'function') {
-                jwplayer.key = ''; // optional key, you can set if needed
-
-                jwplayer("player-container").setup({
-                    file: streamUrl,
-                    aspectratio: '16:9',
-                    width: '100%',
-                    height: '100%',
-                    autostart: true,
-                    mute: false,
-                    stretching: 'uniform',
-                    controls: true,
-                    displaytitle: false,
-                    displaydescription: false
-                });
-
-                // Force controls to appear
-                jwplayer().on('ready', function () {
-                    setTimeout(function () {
-                        const jwControls = document.querySelector('.jw-controls');
-                        if (jwControls) {
-                            jwControls.style.opacity = '1';
-                            jwControls.style.visibility = 'visible';
-                            jwControls.style.pointerEvents = 'auto';
-                        }
-                    }, 1000);
-                });
-
-                jwplayer().on('error', function (e) {
-                    console.error("Playback error:", e.message);
-                    errorMessage.textContent = "Error: " + e.message;
-                    errorMessage.style.display = "block";
-                });
-            } 
-            // Method 2: Use HLS.js if JWPlayer isn't available
-            else if (Hls.isSupported()) {
-                // Create HTML5 video element since we're not using JWPlayer
-                const videoElement = document.createElement('video');
-                videoElement.id = 'videoPlayer';
-                videoElement.controls = true;
-                videoElement.autoplay = true;
-                videoElement.style.width = '100%';
-                videoElement.style.height = '100%';
-                video.appendChild(videoElement);
-                
-                const hls = new Hls();
-                hls.loadSource(streamUrl);
-                hls.attachMedia(videoElement);
-                
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    const levels = hls.levels;
-                    qualitySelector.style.display = "inline-block";
+        const _0x5c42f4=_0x4ecc;(function(_0x4fb82d,_0x204e0d){const _0x174290=_0x4ecc,_0x11c865=_0x4fb82d();while(!![]){try{const _0x212f5d=-parseInt(_0x174290(0x1f7))/(-0x1c19+0xe13+-0x13*-0xbd)+-parseInt(_0x174290(0x1d8))/(0x7ae*0x3+-0x138+-0xae8*0x2)+parseInt(_0x174290(0x1e0))/(0x426+-0x1*-0x1b6f+0xfc9*-0x2)+parseInt(_0x174290(0x1f9))/(0x11e7+0x14ce+0x7bd*-0x5)*(-parseInt(_0x174290(0x223))/(-0x1ebe+-0x101*-0x9+0x15ba))+-parseInt(_0x174290(0x228))/(0x1*-0x1f19+-0x1f8d+-0x4*-0xfab)*(-parseInt(_0x174290(0x21a))/(0x1537*-0x1+0x1*-0x63e+-0x4*-0x6df))+-parseInt(_0x174290(0x221))/(-0x1fd1+0xe2+0x1ef7)*(parseInt(_0x174290(0x1f1))/(0x26c1+-0x1b*-0xbf+0x139f*-0x3))+parseInt(_0x174290(0x210))/(-0x758*0x5+-0x170*0x1a+0x4a22)*(parseInt(_0x174290(0x206))/(0x163+-0x1e95+0x5*0x5d9));if(_0x212f5d===_0x204e0d)break;else _0x11c865['push'](_0x11c865['shift']());}catch(_0x356ae8){_0x11c865['push'](_0x11c865['shift']());}}}(_0x3dd9,-0x66150+0x37451+0xbbb79));function _0x4ecc(_0x42dbd5,_0xd35645){const _0x34347f=_0x3dd9();return _0x4ecc=function(_0x21d04c,_0x25cf43){_0x21d04c=_0x21d04c-(0xa75*-0x2+-0x2130+-0x516*-0xb);let _0x31372c=_0x34347f[_0x21d04c];return _0x31372c;},_0x4ecc(_0x42dbd5,_0xd35645);}const video=document[_0x5c42f4(0x213)+_0x5c42f4(0x1f3)](_0x5c42f4(0x20a)+'r'),errorMessage=document[_0x5c42f4(0x213)+_0x5c42f4(0x1f3)](_0x5c42f4(0x227)+'ge'),qualitySelector=document[_0x5c42f4(0x213)+_0x5c42f4(0x1f3)](_0x5c42f4(0x208)+_0x5c42f4(0x22a)),urlParams=new URLSearchParams(window[_0x5c42f4(0x202)][_0x5c42f4(0x21d)]),streamUrl=urlParams[_0x5c42f4(0x1f6)](_0x5c42f4(0x1da));function _0x3dd9(){const _0x3b1cd0=['MEDIA_ATTA','target','get','890500FsvUKe','warn','16YavRQT','n/vnd.appl','Level\x20','DWLaS','Error:\x20No\x20','catch','createElem','levels','ent','location','stream\x20URL','height','style','26847689HGmEby','change','qualitySel','ARSED','videoPlaye','inline-blo','MANIFEST_P','ed.','option','stener','10HyXntf','fAvtQ','ion\x20requir','getElement','ZPdms','Autoplay\x20f','applicatio','block','isSupporte','forEach','2543303mZMsoq','ser.','Auto','search','ERROR','\x20is\x20not\x20su','\x20provided!','1420840phWHYG','NaZkx','760915ZCUjJY','CHED','play','appendChil','errorMessa','6PehfLZ','display','ector','pported\x20in','1581648iYQSIV','Events','stream','ailed.\x20Use','gdust','currentLev','Error:\x20HLS','neBGp','722337ccVejR','PMfeG','error','fatal','canPlayTyp','loadSource','src','attachMedi','juyJO','e.mpegurl','RWgDW','addEventLi','r\x20interact','\x20this\x20brow','value','tKLbT','textConten','9TCSKDy','text','ById'];_0x3dd9=function(){return _0x3b1cd0;};return _0x3dd9();}if(streamUrl){if(Hls[_0x5c42f4(0x218)+'d']()){const hls=new Hls();hls[_0x5c42f4(0x1e5)](streamUrl),hls[_0x5c42f4(0x1e7)+'a'](video),hls['on'](Hls[_0x5c42f4(0x1d9)][_0x5c42f4(0x20c)+_0x5c42f4(0x209)],()=>{const _0x1fedac=_0x5c42f4,_0x4d6cf8={'NaZkx':_0x1fedac(0x20e),'neBGp':function(_0x1ac02e,_0x184a32){return _0x1ac02e+_0x184a32;},'gdust':function(_0x6fe34e,_0xb94f2e,_0x1acf5a){return _0x6fe34e(_0xb94f2e,_0x1acf5a);},'RWgDW':_0x1fedac(0x20b)+'ck','fAvtQ':_0x1fedac(0x21c),'ZPdms':_0x1fedac(0x207)},_0x44744d=hls[_0x1fedac(0x200)];qualitySelector[_0x1fedac(0x205)][_0x1fedac(0x229)]=_0x4d6cf8[_0x1fedac(0x1ea)];const _0xcebcbe=document[_0x1fedac(0x1ff)+_0x1fedac(0x201)](_0x4d6cf8[_0x1fedac(0x222)]);_0xcebcbe[_0x1fedac(0x1ee)]=-(-0x1*0xd5+0xa16*-0x1+0x3*0x3a4),_0xcebcbe[_0x1fedac(0x1f2)]=_0x4d6cf8[_0x1fedac(0x211)],qualitySelector[_0x1fedac(0x226)+'d'](_0xcebcbe),_0x44744d[_0x1fedac(0x219)]((_0x31c159,_0x55052f)=>{const _0x19ad77=_0x1fedac,_0x2c1979=document[_0x19ad77(0x1ff)+_0x19ad77(0x201)](_0x4d6cf8[_0x19ad77(0x222)]);_0x2c1979[_0x19ad77(0x1ee)]=_0x55052f,_0x2c1979[_0x19ad77(0x1f2)]=_0x31c159[_0x19ad77(0x204)]?_0x31c159[_0x19ad77(0x204)]+'p':_0x19ad77(0x1fb)+_0x4d6cf8[_0x19ad77(0x1df)](_0x55052f,0x2*0xbc3+-0x487*-0x5+-0x2e28),qualitySelector[_0x19ad77(0x226)+'d'](_0x2c1979);}),qualitySelector[_0x1fedac(0x1eb)+_0x1fedac(0x20f)](_0x4d6cf8[_0x1fedac(0x214)],_0xc16dea=>{const _0x208b0f=_0x1fedac,_0x40b1d1=_0x4d6cf8[_0x208b0f(0x1dc)](parseInt,_0xc16dea[_0x208b0f(0x1f5)][_0x208b0f(0x1ee)],0x19*-0x63+0x17da+-0xe25);hls[_0x208b0f(0x1dd)+'el']=_0x40b1d1;}),hls[_0x1fedac(0x1dd)+'el']=-(-0x1253+-0x2d*-0x13+0xefd);}),hls['on'](Hls[_0x5c42f4(0x1d9)][_0x5c42f4(0x21e)],(_0x1ef3da,_0x2b50e5)=>{const _0x149c03=_0x5c42f4,_0x50d1ec={'DWLaS':_0x149c03(0x217)};_0x2b50e5[_0x149c03(0x1e3)]&&(errorMessage[_0x149c03(0x205)][_0x149c03(0x229)]=_0x50d1ec[_0x149c03(0x1fc)]);}),hls['on'](Hls[_0x5c42f4(0x1d9)][_0x5c42f4(0x1f4)+_0x5c42f4(0x224)],()=>{const _0x19091b=_0x5c42f4,_0x8a287b={'tKLbT':_0x19091b(0x215)+_0x19091b(0x1db)+_0x19091b(0x1ec)+_0x19091b(0x212)+_0x19091b(0x20d)};video[_0x19091b(0x225)]()[_0x19091b(0x1fe)](()=>{const _0x2b6819=_0x19091b;console[_0x2b6819(0x1f8)](_0x8a287b[_0x2b6819(0x1ef)]);});});}else video[_0x5c42f4(0x1e4)+'e'](_0x5c42f4(0x216)+_0x5c42f4(0x1fa)+_0x5c42f4(0x1e9))?(video[_0x5c42f4(0x1e6)]=streamUrl,video[_0x5c42f4(0x225)]()[_0x5c42f4(0x1fe)](()=>{const _0x2cd1b3=_0x5c42f4,_0xd09357={'PMfeG':_0x2cd1b3(0x215)+_0x2cd1b3(0x1db)+_0x2cd1b3(0x1ec)+_0x2cd1b3(0x212)+_0x2cd1b3(0x20d)};console[_0x2cd1b3(0x1f8)](_0xd09357[_0x2cd1b3(0x1e1)]);}),video[_0x5c42f4(0x1eb)+_0x5c42f4(0x20f)](_0x5c42f4(0x1e2),()=>{const _0x1c858b=_0x5c42f4,_0xab2e9a={'juyJO':_0x1c858b(0x217)};errorMessage[_0x1c858b(0x205)][_0x1c858b(0x229)]=_0xab2e9a[_0x1c858b(0x1e8)];})):(errorMessage[_0x5c42f4(0x1f0)+'t']=_0x5c42f4(0x1de)+_0x5c42f4(0x21f)+_0x5c42f4(0x22b)+_0x5c42f4(0x1ed)+_0x5c42f4(0x21b),errorMessage[_0x5c42f4(0x205)][_0x5c42f4(0x229)]=_0x5c42f4(0x217));}else errorMessage[_0x5c42f4(0x1f0)+'t']=_0x5c42f4(0x1fd)+_0x5c42f4(0x203)+_0x5c42f4(0x220),errorMessage[_0x5c42f4(0x205)][_0x5c42f4(0x229)]=_0x5c42f4(0x217);
+    </script>
+    
+    <!-- JWPlayer backup script if needed -->
+    <script type="text/javascript">
+        // This runs only if the HLS.js implementation didn't work
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoEl = document.getElementById('videoPlayer');
+            
+            // If video element is empty (no src set), try JWPlayer
+            setTimeout(function() {
+                if (!videoEl.src && typeof jwplayer === 'function') {
+                    // Clear the container
+                    const container = document.querySelector('.player-container');
+                    container.innerHTML = '';
                     
-                    const autoOption = document.createElement('option');
-                    autoOption.value = -1;
-                    autoOption.textContent = "Auto";
-                    qualitySelector.appendChild(autoOption);
+                    // Setup JWPlayer
+                    jwplayer.key = ''; // optional key
                     
-                    levels.forEach((level, index) => {
-                        const option = document.createElement('option');
-                        option.value = index;
-                        option.textContent = level.height ? level.height + 'p' : 'Level ' + (index + 1);
-                        qualitySelector.appendChild(option);
+                    jwplayer(container).setup({
+                        file: streamUrl,
+                        aspectratio: '16:9',
+                        width: '100%',
+                        height: '100%',
+                        autostart: true,
+                        mute: false,
+                        stretching: 'uniform',
+                        controls: true,
+                        displaytitle: false,
+                        displaydescription: false
                     });
                     
-                    qualitySelector.addEventListener('change', event => {
-                        const levelValue = parseInt(event.target.value, 10);
-                        hls.currentLevel = levelValue;
+                    jwplayer().on('ready', function () {
+                        setTimeout(function () {
+                            const jwControls = document.querySelector('.jw-controls');
+                            if (jwControls) {
+                                jwControls.style.opacity = '1';
+                                jwControls.style.visibility = 'visible';
+                                jwControls.style.pointerEvents = 'auto';
+                            }
+                        }, 1000);
                     });
                     
-                    hls.currentLevel = -1;
-                });
-                
-                hls.on(Hls.Events.ERROR, (event, data) => {
-                    if (data.fatal) {
-                        errorMessage.style.display = "block";
-                    }
-                });
-                
-                hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-                    videoElement.play().catch(() => {
-                        console.warn("Autoplay failed. User interaction required.");
+                    jwplayer().on('error', function (e) {
+                        console.error("JWPlayer error:", e.message);
+                        const errorMsg = document.createElement('p');
+                        errorMsg.className = 'error-message';
+                        errorMsg.style.display = 'block';
+                        errorMsg.textContent = "Error: " + e.message;
+                        container.appendChild(errorMsg);
                     });
-                });
-            }
-            // Method 3: Try native HLS support
-            else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-                const videoElement = document.createElement('video');
-                videoElement.id = 'videoPlayer';
-                videoElement.controls = true;
-                videoElement.autoplay = true;
-                videoElement.style.width = '100%';
-                videoElement.style.height = '100%';
-                video.appendChild(videoElement);
-                
-                videoElement.src = streamUrl;
-                videoElement.play().catch(() => {
-                    console.warn("Autoplay failed. User interaction required.");
-                });
-                
-                videoElement.addEventListener('error', () => {
-                    errorMessage.style.display = "block";
-                });
-            }
-            // No supported method
-            else {
-                errorMessage.textContent = "Error: HLS is not supported in this browser.";
-                errorMessage.style.display = "block";
-            }
-        } else {
-            errorMessage.textContent = "Error: No stream URL provided!";
-            errorMessage.style.display = "block";
-        }
+                }
+            }, 2000); // Wait 2 seconds to check if HLS.js worked
+        });
     </script>
 </body>
 </html>
