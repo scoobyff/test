@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-    <script src="https://ssl.p.jwpcdn.com/player/v/8.32.1/jwplayer.js" type="text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player</title>
@@ -41,6 +40,13 @@
             border: 2px solid #00c2ff;
             box-shadow: 0 0 20px #00c2ff, 0 0 40px rgba(0, 194, 255, 0.5);
             box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         .content-wrapper {
@@ -81,14 +87,6 @@
 
         .telegram-btn i {
             margin-right: 8px;
-        }
-
-        /* Make sure JW player controls are visible */
-        .jw-state-idle .jw-controls,
-        .jwplayer .jw-controls {
-            opacity: 1 !important;
-            visibility: visible !important;
-            pointer-events: auto !important;
         }
 
         /* Custom scrollbar styles */
@@ -134,7 +132,16 @@
 </head>
 
 <body>
-    <div id="player-container"></div>
+    <div id="player-container">
+        <!-- Replace the src with your actual video source -->
+        <iframe 
+            src="https://raw.githubusercontent.com/scoobyff/jiohotstar/main/ss1telugu.m3u8" 
+            title="Video Player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+        </iframe>
+    </div>
     
     <div class="content-wrapper">
         <!-- Content area after the video if needed -->
@@ -145,68 +152,11 @@
     </a>
 
     <script type="text/javascript">
-        jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
-        jwplayer("player-container").setup({
-            file: "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1745078877~acl=/*~hmac=86b73d7069fc33c77c64f5a0015d32f2e7f25e070d6a0b9a5a7a4d28afd98050",
-            aspectratio: '16:9',
-            width: '100%',
-            height: '100%',
-            autostart: true,
-            image: 'https://mma.prnewswire.com/media/1919551/WillowTV_Logo.jpg?p=facebook',
-            mute: false,
-            preload: 'auto',
-            captions: { color: 'white', fontSize: '16px', backgroundOpacity: 0 },
-            sharing: {
-                sites: ['facebook', 'twitter']
-            },
-            stretching: 'uniform',
-            controls: true,
-            displaytitle: true,
-            displaydescription: true
-        });
-
-        // Force controls to be visible and fix player size
-        jwplayer().on('ready', function () {
-            const playerElement = document.querySelector('#player-container');
-            if (playerElement) {
-                playerElement.style.height = '100vh';
-            }
-            
-            // Set a timeout to ensure controls are visible after initialization
-            setTimeout(function() {
-                const jwControls = document.querySelector('.jw-controls');
-                if (jwControls) {
-                    jwControls.style.opacity = '1';
-                    jwControls.style.visibility = 'visible';
-                    jwControls.style.pointerEvents = 'auto';
-                }
-            }, 1000);
-        });
-
-        // Make sure controls appear on player interaction
-        jwplayer().on('play', function () {
-            document.body.style.backgroundColor = "#000";
-        });
-
-        // Ensure controls are visible when user taps
-        document.addEventListener('click', function() {
-            const jwControls = document.querySelector('.jw-controls');
-            if (jwControls) {
-                jwControls.style.opacity = '1';
-                jwControls.style.visibility = 'visible';
-                jwControls.style.pointerEvents = 'auto';
-            }
-        });
-
-        jwplayer().on('error', function (e) {
-            console.error("Playback error:", e.message);
-        });
-
         // You can add your Telegram link here
         document.getElementById('telegram-btn').addEventListener('click', function(e) {
             e.preventDefault();
-            // Replace with your actual Telegram link in the backend
-            // window.open('https://t.me/scoobystream', '_blank');
+            // Replace with your actual Telegram link
+            // window.open('https://t.me/yourchannelname', '_blank');
             alert('Please Join Our Telegram Channels for links');
         });
     </script>
