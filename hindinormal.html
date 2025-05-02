@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player</title>
+    <!-- Shaka Player compiled library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.6/shaka-player.compiled.js"></script>
     <style>
         body {
             margin: 0;
@@ -43,10 +45,10 @@
             overflow: hidden;
         }
 
-        iframe {
+        video {
             width: 100%;
             height: 100%;
-            border: none;
+            object-fit: contain;
         }
 
         .content-wrapper {
@@ -121,6 +123,25 @@
             animation: neonPulse 3s infinite ease-in-out;
         }
 
+        /* Loading indicator */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 194, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00c2ff;
+            animation: spin 1s ease-in-out infinite;
+            z-index: 5;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .telegram-btn {
                 padding: 10px 20px;
@@ -133,14 +154,8 @@
 
 <body>
     <div id="player-container">
-        <!-- Replace the src with your actual video source -->
-        <iframe 
-            src="https://raw.githubusercontent.com/scoobyff/jiohotstar/main/ss1telugu.m3u8" 
-            title="Video Player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowfullscreen>
-        </iframe>
+        <div class="loading-spinner" id="loading-spinner"></div>
+        <video id="video" controls autoplay playsinline></video>
     </div>
     
     <div class="content-wrapper">
@@ -152,7 +167,132 @@
     </a>
 
     <script type="text/javascript">
-        // You can add your Telegram link here
+        // Shaka Player initialization
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        function initApp() {
+            // Install built-in polyfills to patch browser incompatibilities
+            shaka.polyfill.installAll();
+
+            // Check if the browser supports Shaka Player
+            if (shaka.Player.isBrowserSupported()) {
+                // Everything looks good!
+                initPlayer();
+            } else {
+                // This browser does not have the minimum set of APIs needed
+                console.error('Browser not supported for Shaka Player!');
+                const playerContainer = document.getElementById('player-container');
+                const errorMessage = document.createElement('div');
+                errorMessage.textContent = 'Your browser is not supported for video playback.';
+                errorMessage.style.position = 'absolute';
+                errorMessage.style.top = '50%';
+                errorMessage.style.left = '50%';
+                errorMessage.style.transform = 'translate(-50%, -50%)';
+                errorMessage.style.color = 'white';
+                errorMessage.style.textAlign = 'center';
+                errorMessage.style.fontSize = '18px';
+                playerContainer.appendChild(errorMessage);
+            }
+        }
+
+        function initPlayer() {
+            // Create a Player instance
+            const video = document.getElementById('video');
+            const player = new shaka.Player(video);
+            const loadingSpinner = document.getElementById('loading-spinner');
+            
+            // Set autoplay on the player
+            video.autoplay = true;
+
+            // Listen for error events
+            player.addEventListener('error', onErrorEvent);
+
+            // Configure player - you can customize these settings
+            player.configure({
+                streaming: {
+                    rebufferingGoal: 2,
+                    bufferingGoal: 10,
+                    bufferBehind: 30
+                },
+                abr: {
+                    enabled: true,
+                    defaultBandwidthEstimate: 1000000 // 1 Mbps
+                }
+            });
+            
+            // Try to load a manifest
+            loadStream(player).catch(onError);
+            
+            // Define initial live stream URL - Replace with your own stream URL
+            function loadStream(player) {
+                // Show loading spinner
+                loadingSpinner.style.display = 'block';
+                
+                // Replace this with your stream URL - this should be an HLS or DASH stream URL
+                // For example: 'https://your-streaming-server.com/stream/index.m3u8'
+                const streamUrl = 'https://raw.githubusercontent.com/scoobyff/jiohotstar/main/ss1telugu.m3u8'; // Sample HLS stream
+                
+                // The load() Promise resolves after the manifest has been parsed, but before
+                // any segments have been downloaded. We hide the loading spinner once playback starts.
+                return player.load(streamUrl).then(function() {
+                    // This runs if the asynchronous load is successful
+                    console.log('The stream has been loaded successfully');
+                }).catch(onError).finally(() => {
+                    // Hide loading spinner when video starts playing or fails
+                    video.addEventListener('playing', function() {
+                        loadingSpinner.style.display = 'none';
+                    }, { once: true });
+                    
+                    // If video doesn't play within 10 seconds, hide spinner anyway
+                    setTimeout(() => {
+                        loadingSpinner.style.display = 'none';
+                    }, 10000);
+                });
+            }
+
+            // Listen for play/pause events to control background color
+            video.addEventListener('play', function() {
+                document.body.style.backgroundColor = "#000";
+            });
+
+            // Error handling functions
+            function onErrorEvent(event) {
+                // Extract the shaka.util.Error object from the event
+                onError(event.detail);
+            }
+
+            function onError(error) {
+                // Log the error
+                console.error('Error code', error.code, 'object', error);
+                
+                // Hide loading spinner if there is an error
+                loadingSpinner.style.display = 'none';
+                
+                // Display error message to user
+                const playerContainer = document.getElementById('player-container');
+                // Check if error message already exists
+                let errorMessage = document.querySelector('.error-message');
+                if (!errorMessage) {
+                    errorMessage = document.createElement('div');
+                    errorMessage.className = 'error-message';
+                    errorMessage.style.position = 'absolute';
+                    errorMessage.style.top = '50%';
+                    errorMessage.style.left = '50%';
+                    errorMessage.style.transform = 'translate(-50%, -50%)';
+                    errorMessage.style.color = 'white';
+                    errorMessage.style.textAlign = 'center';
+                    errorMessage.style.fontSize = '18px';
+                    errorMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                    errorMessage.style.padding = '20px';
+                    errorMessage.style.borderRadius = '5px';
+                    errorMessage.style.zIndex = '10';
+                    playerContainer.appendChild(errorMessage);
+                }
+                errorMessage.textContent = 'Error loading stream. Please try again later.';
+            }
+        }
+
+        // Telegram button click handler
         document.getElementById('telegram-btn').addEventListener('click', function(e) {
             e.preventDefault();
             // Replace with your actual Telegram link
