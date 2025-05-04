@@ -1,5 +1,10 @@
 {
+  "streamUrl": "https://your-stream-url.m3u8",
+  "referrer": "",
   "userAgent": "Hotstar;in.startv.hotstar/25.02.24.8.11169%20(Android/15)",
-  "cookie": "hdntl=exp=1746430813~acl=%2f*~id=458afbc5d190c9e21a1cd35d77198a3b~data=hdntl~hmac=b6ade911e9648a40f821e6a8c0d8c9da28382eb5cc0969453f1388aac02c9ddb; auth=xyz456",
-  "referrer": ""
+  "cookies": "hdntl=exp=1746430813~acl=%2f*~id=458afbc5d190c9e21a1cd35d77198a3b~data=hdntl~hmac=b6ade911e9648a40f821e6a8c0d8c9da28382eb5cc0969453f1388aac02c9ddb",
+  "telegramLink": "https://t.me/your_channel",
+  "customHeaders": {
+    "X-Custom-Header": ""
+  }
 }
