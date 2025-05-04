@@ -1,0 +1,86 @@
+{
+  "languages": [
+    {
+      "id": "english",
+      "name": "English",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_ENG_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "hindi",
+      "name": "Hindi",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_HIN_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "gujarati",
+      "name": "Gujarati",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_Guj_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "marathi",
+      "name": "Marathi",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_MAR_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "punjabi",
+      "name": "Punjabi",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_Punj_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "haryanvi",
+      "name": "Haryanvi",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_HAR_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "bhojpuri",
+      "name": "Bhojpuri",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_Bhoj_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "tamil",
+      "name": "Tamil",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_TAM_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "telugu",
+      "name": "Telugu",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_TEL_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "kannada",
+      "name": "Kannada",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_KAN_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "malayalam",
+      "name": "Malayalam",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_Mal_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "bengali",
+      "name": "Bengali",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_BEN_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "camera1",
+      "name": "Camera 1",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_CAM01_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "camera2",
+      "name": "Camera 2",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_CAM02_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "camera3",
+      "name": "Camera 3",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_CAM03_IDC_MOB/Fallback/index2.m3u8"
+    },
+    {
+      "id": "camera4",
+      "name": "Camera 4",
+      "streamUrl": "https://jcevents.hotstar.com/bpk-tv/JS_M1_IPL25_CAM04_IDC_MOB/Fallback/index2.m3u8"
+    }
+  ],
+  "defaultLanguage": "english",
+  "telegramLink": "https://t.me/yourchannel"
+}
