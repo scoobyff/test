@@ -1,4 +1,8 @@
 #EXTM3U
 
-#EXTINF:-1,Google DAI Stream
-https://dai.google.com/linear/hls/event/Ei8BfVkgS_-6Iock4AfRkw/master.m3u8?hdnea=exp=1745735240~acl=*~id=1698848813001_19b9e045-30d4-4c~data=1698848813001~hmac=d8c3c2b22b1066dc8de3dd6898ffbf6879d03d7bf8df1bd6a720bdb5a51ddc4f
+# Audio group
+#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="Telugu",DEFAULT=YES,AUTOSELECT=YES,URI="https://z5ak-cmaflive.zee5.com/cmaf/live/2105545/ZeeTeluguHDELE/master_aud.m3u8?hdntl=exp=1746599515~acl=/*~data=hdntl~hmac=ec68f3bdda007d0101aa0078f175be32c5dc4a2751ff3b459f119d0037f7d774"
+
+# Video stream with reference to audio group
+#EXT-X-STREAM-INF:BANDWIDTH=3000000,CODECS="avc1.64001f",AUDIO="audio"
+https://z5ak-cmaflive.zee5.com/cmaf/live/2105545/ZeeTeluguHDELE/master_1080p.m3u8?hdntl=exp=1746599515~acl=/*~data=hdntl~hmac=ec68f3bdda007d0101aa0078f175be32c5dc4a2751ff3b459f119d0037f7d774
