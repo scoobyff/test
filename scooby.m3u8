@@ -3,6 +3,16 @@
 # Audio group
 #EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="Telugu",DEFAULT=YES,AUTOSELECT=YES,URI="https://dplusindia-prod-vod-v2.akamaized.net/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/hdntl=exp=1746607203~acl=/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/*~data=hdntl~hmac=b76dccf1071c76c5e8c32b799b47a517aacc23a323d83d00d2b42579fc40a749/audio-te-d44f3f9f-15d3-4c2f-84bc-0b6645543576/video-128000bps.m3u8"
 
+#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="EDO OKATI 1",DEFAULT=NO,AUTOSELECT=NO,URI="https://dplusindia-prod-vod-v2.akamaized.net/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/hdntl=exp=1746607203~acl=/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/*~data=hdntl~hmac=b76dccf1071c76c5e8c32b799b47a517aacc23a323d83d00d2b42579fc40a749/audio-bn-6acd2397-da77-4287-af74-8c9d03d0c8e7/video-128000bps.m3u8"
+
+#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="EDO OKATI 2",DEFAULT=NO,AUTOSELECT=NO,URI= "https://dplusindia-prod-vod-v2.akamaized.net/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/hdntl=exp=1746607203~acl=/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/*~data=hdntl~hmac=b76dccf1071c76c5e8c32b799b47a517aacc23a323d83d00d2b42579fc40a749/audio-kn-a64dceee-3c1d-403a-bab0-94b2d536c659/video-128000bps.m3u8"
+
+#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="EDO OKATI 3",DEFAULT=NO,AUTOSELECT=NO,URI="https://dplusindia-prod-vod-v2.akamaized.net/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/hdntl=exp=1746607203~acl=/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/*~data=hdntl~hmac=b76dccf1071c76c5e8c32b799b47a517aacc23a323d83d00d2b42579fc40a749/audio-kn-a64dceee-3c1d-403a-bab0-94b2d536c659/video-128000bps.m3u8"
+
+#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="EDO OKATI 4",DEFAULT=NO,AUTOSELECT=NO,URI="https://dplusindia-prod-vod-v2.akamaized.net/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/hdntl=exp=1746607203~acl=/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/*~data=hdntl~hmac=b76dccf1071c76c5e8c32b799b47a517aacc23a323d83d00d2b42579fc40a749/audio-ml-857c42e9-038e-4c92-ad70-7e22799c8744/video-128000bps.m3u8"
+
+#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="EDO OKATI 5",DEFAULT=NO,AUTOSELECT=NO,URI="https://dplusindia-prod-vod-v2.akamaized.net/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/hdntl=exp=1746607203~acl=/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/*~data=hdntl~hmac=b76dccf1071c76c5e8c32b799b47a517aacc23a323d83d00d2b42579fc40a749/video-960x540-787084-ace83215-8091-48ba-a132-76d7a50c1cb0/video-787084bps.m3u8"
+
 # Video stream with reference to audio group
 #EXT-X-STREAM-INF:BANDWIDTH=3000000,CODECS="avc1.64001f",AUDIO="audio"
 https://dplusindia-prod-vod-v2.akamaized.net/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/hdntl=exp=1746607203~acl=/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/*~data=hdntl~hmac=b76dccf1071c76c5e8c32b799b47a517aacc23a323d83d00d2b42579fc40a749/video-960x540-787084-ace83215-8091-48ba-a132-76d7a50c1cb0/video-787084bps.m3u8
