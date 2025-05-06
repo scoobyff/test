@@ -1,8 +1,8 @@
 #EXTM3U
 
 # Audio group
-#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="Telugu",DEFAULT=YES,AUTOSELECT=YES,URI="https://z5ak-cmaflive.zee5.com/cmaf/live/2105545/ZeeTeluguHDELE/master_aud.m3u8?hdntl=exp=1746599515~acl=/*~data=hdntl~hmac=ec68f3bdda007d0101aa0078f175be32c5dc4a2751ff3b459f119d0037f7d774"
+#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio",NAME="Telugu",DEFAULT=YES,AUTOSELECT=YES,URI="https://dplusindia-prod-vod-v2.akamaized.net/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/hdntl=exp=1746607203~acl=/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/*~data=hdntl~hmac=b76dccf1071c76c5e8c32b799b47a517aacc23a323d83d00d2b42579fc40a749/audio-te-d44f3f9f-15d3-4c2f-84bc-0b6645543576/video-128000bps.m3u8"
 
 # Video stream with reference to audio group
 #EXT-X-STREAM-INF:BANDWIDTH=3000000,CODECS="avc1.64001f",AUDIO="audio"
-https://z5ak-cmaflive.zee5.com/cmaf/live/2105545/ZeeTeluguHDELE/master_1080p.m3u8?hdntl=exp=1746599515~acl=/*~data=hdntl~hmac=ec68f3bdda007d0101aa0078f175be32c5dc4a2751ff3b459f119d0037f7d774
+https://dplusindia-prod-vod-v2.akamaized.net/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/hdntl=exp=1746607203~acl=/93a0/25f2/eb6e/28b56d97-5b1f-4e46-9afc-722592306500/ts-raw/*~data=hdntl~hmac=b76dccf1071c76c5e8c32b799b47a517aacc23a323d83d00d2b42579fc40a749/video-960x540-787084-ace83215-8091-48ba-a132-76d7a50c1cb0/video-787084bps.m3u8
