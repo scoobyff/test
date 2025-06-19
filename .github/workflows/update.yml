@@ -1,0 +1,91 @@
+name: Fetch CDN URLs Every 5 min
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-cdn-urls:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Fetch multiple channel data
+        run: |
+          # Read channel IDs from secrets (comma-separated)
+          IFS=',' read -ra CHANNEL_IDS <<< "${{ secrets.CHANNEL_IDS }}"
+          
+          # Initialize JSON array
+          echo "[" > channels.json
+          
+          # Counter for JSON formatting
+          count=0
+          total=${#CHANNEL_IDS[@]}
+          
+          for channel_id in "${CHANNEL_IDS[@]}"; do
+            # Trim whitespace
+            channel_id=$(echo "$channel_id" | xargs)
+            
+            echo "Fetching data for channel ID: $channel_id"
+            
+            # Fetch API response
+            response=$(curl -s -H "Referer: https://dora-bash-live.blogspot.com/" \
+              "https://proxy.animebash.workers.dev/?u=https://bashserver.xyz/fucku.php?id=${channel_id}")
+            
+            # Parse JSON and extract required fields
+            mpd=$(echo "$response" | jq -r '.mpd // empty')
+            kid=$(echo "$response" | jq -r '.kid // empty')
+            key=$(echo "$response" | jq -r '.key // empty')
+            
+            # Create formatted JSON object
+            if [ -n "$mpd" ] && [ -n "$kid" ] && [ -n "$key" ]; then
+              # Add comma if not first element
+              if [ $count -gt 0 ]; then
+                echo "," >> channels.json
+              fi
+              
+              # Add channel data
+              cat >> channels.json << EOF
+  {
+    "id": "$channel_id",
+    "mpd": "$mpd",
+    "kid": "$kid",
+    "key": "$key"
+  }EOF
+              
+              ((count++))
+            else
+              echo "Warning: Failed to fetch complete data for channel $channel_id"
+            fi
+          done
+          
+          # Close JSON array
+          echo "" >> channels.json
+          echo "]" >> channels.json
+          
+          echo "Generated channels.json:"
+          cat channels.json
+          
+          # Also create individual get.txt for backward compatibility
+          if [ ${#CHANNEL_IDS[@]} -gt 0 ]; then
+            first_id="${CHANNEL_IDS[0]}"
+            first_id=$(echo "$first_id" | xargs)
+            response=$(curl -s -H "Referer: https://dora-bash-live.blogspot.com/" \
+              "https://proxy.animebash.workers.dev/?u=https://bashserver.xyz/fucku.php?id=${first_id}")
+            echo "$response" > get.txt
+          fi
+
+      - name: Commit and push files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add channels.json get.txt
+          git commit -m "Update channel data - $(date -u)" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
