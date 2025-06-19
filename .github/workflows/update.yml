@@ -17,75 +17,44 @@ jobs:
 
       - name: Fetch multiple channel data
         run: |
-          # Read channel IDs from secrets (space-separated)
-          read -ra CHANNEL_IDS <<< "${{ secrets.CHANNEL_IDS }}"
+          # Read channel IDs from secrets (comma-separated)
+          IFS=',' read -ra CHANNEL_IDS <<< "${{ secrets.CHANNEL_IDS }}"
           
-          # Initialize JSON array
-          echo "[" > channels.json
+          # Create a temporary file for individual responses
+          rm -f temp_responses.txt
           
-          # Counter for JSON formatting
-          count=0
-          total=${#CHANNEL_IDS[@]}
-          
+          # Fetch all channel data
           for channel_id in "${CHANNEL_IDS[@]}"; do
-            # Trim whitespace
             channel_id=$(echo "$channel_id" | xargs)
-            
             echo "Fetching data for channel ID: $channel_id"
             
-            # Fetch API response
             response=$(curl -s -H "Referer: https://dora-bash-live.blogspot.com/" \
               "https://proxy.animebash.workers.dev/?u=https://bashserver.xyz/fucku.php?id=${channel_id}")
             
-            # Parse JSON and extract required fields
-            mpd=$(echo "$response" | jq -r '.mpd // empty')
-            kid=$(echo "$response" | jq -r '.kid // empty')
-            key=$(echo "$response" | jq -r '.key // empty')
-            
-            # Create formatted JSON object
-            if [ -n "$mpd" ] && [ -n "$kid" ] && [ -n "$key" ]; then
-              # Add comma if not first element
-              if [ $count -gt 0 ]; then
-                echo "," >> channels.json
-              fi
-              
-              # Add channel data
-              cat >> channels.json << 'EOF'
-  {
-    "id": "$channel_id",
-    "mpd": "$mpd",
-    "kid": "$kid",
-    "key": "$key"
-  }
-EOF
-              
-              ((count++))
+            # Check if response is valid JSON
+            if echo "$response" | jq empty 2>/dev/null; then
+              echo "$response" >> temp_responses.txt
             else
-              echo "Warning: Failed to fetch complete data for channel $channel_id"
+              echo "Warning: Invalid response for channel $channel_id"
             fi
           done
           
-          # Close JSON array
-          echo "" >> channels.json
-          echo "]" >> channels.json
-          
-          echo "Generated channels.json:"
-          cat channels.json
-          
-          # Also create individual get.txt for backward compatibility
-          if [ ${#CHANNEL_IDS[@]} -gt 0 ]; then
-            first_id="${CHANNEL_IDS[0]}"
-            first_id=$(echo "$first_id" | xargs)
-            response=$(curl -s -H "Referer: https://dora-bash-live.blogspot.com/" \
-              "https://proxy.animebash.workers.dev/?u=https://bashserver.xyz/fucku.php?id=${first_id}")
-            echo "$response" > get.txt
+          # Create single get.txt file with all channels
+          if [ -f temp_responses.txt ]; then
+            jq -s '.' temp_responses.txt > get.txt
+            rm -f temp_responses.txt
+          else
+            echo "[]" > get.txt
           fi
+          
+          echo "Generated get.txt:"
+          cat get.txt
 
       - name: Commit and push files
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add channels.json get.txt
+          git add get.txt
           git commit -m "Update channel data - $(date -u)" || echo "No changes to commit"
           git push
         env:
