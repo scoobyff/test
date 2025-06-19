@@ -17,8 +17,8 @@ jobs:
 
       - name: Fetch multiple channel data
         run: |
-          # Read channel IDs from secrets (comma-separated)
-          IFS=',' read -ra CHANNEL_IDS <<< "${{ secrets.CHANNEL_IDS }}"
+          # Read channel IDs from secrets (space-separated)
+          read -ra CHANNEL_IDS <<< "${{ secrets.CHANNEL_IDS }}"
           
           # Initialize JSON array
           echo "[" > channels.json
@@ -50,13 +50,14 @@ jobs:
               fi
               
               # Add channel data
-              cat >> channels.json << EOF
+              cat >> channels.json << 'EOF'
   {
     "id": "$channel_id",
     "mpd": "$mpd",
     "kid": "$kid",
     "key": "$key"
-  }EOF
+  }
+EOF
               
               ((count++))
             else
