@@ -1,19 +1,19 @@
 [
   {
     "id": "460",
-    "mpd": "https://bpaita5.akamaized.net/bpk-tv/irdeto_com_Channel_722/output/manifest.mpd?hdnea=st=1750541621~exp=1750542221~acl=/bpk-tv/irdeto_com_Channel_722/output/*~id=1076415189~hmac=c17be9d65e2d5b4774bb398cadf02d9099ffd75e9bab3a4e888342d6e8e63aa3",
+    "mpd": "https://bpaita5.akamaized.net/bpk-tv/irdeto_com_Channel_722/output/manifest.mpd?hdnea=st=1750542206~exp=1750542806~acl=/bpk-tv/irdeto_com_Channel_722/output/*~id=1076415189~hmac=0b5a7663d30e6c7f14930e61b3c979e7465f7faf51183f8c25c8421a951680bf",
     "kid": "0faad6978c3350bf88113acf9652d914",
     "key": "75ea2b9310e266445721f0ec146afdf9"
   },
   {
     "id": "158",
-    "mpd": "https://bpaita7.akamaized.net/bpk-tv/irdeto_com_Channel_400/output/manifest.mpd?hdnea=st=1750541625~exp=1750542225~acl=/bpk-tv/irdeto_com_Channel_400/output/*~id=1076415189~hmac=16f76851f1b6e003dfe2ed1c9c598096bebf7470db8cbad5f16e2cd15f84662a",
-    "kid": "eee73235699f53ad9b2da453baf0a839",
-    "key": "865716fc36b85b70b0cdbc076fa3c901"
+    "mpd": "https://bpaita7.akamaized.net/bpk-tv/irdeto_com_Channel_400/output/manifest.mpd?hdnea=st=1750542209~exp=1750542809~acl=/bpk-tv/irdeto_com_Channel_400/output/*~id=1076415189~hmac=21fb87acd3662fe96c784a218872e1b03b41e4b47bf35ef321bbc44ed8d97002",
+    "kid": "5d2fec75cd6f5923bdde9991fa92d815",
+    "key": "7950d172821e31ddb0c9258616f3c9bf"
   },
   {
     "id": "45",
-    "mpd": "https://bpaita3.akamaized.net/bpk-tv/irdeto_com_Channel_365/output/manifest.mpd?hdnea=st=1750541629~exp=1750542229~acl=/bpk-tv/irdeto_com_Channel_365/output/*~id=1076415189~hmac=a33bce0553badd4f72e18be1a4fb60024806cde60ace1f43b6a65f34bc1b402b",
+    "mpd": "https://bpaita3.akamaized.net/bpk-tv/irdeto_com_Channel_365/output/manifest.mpd?hdnea=st=1750542172~exp=1750542772~acl=/bpk-tv/irdeto_com_Channel_365/output/*~id=1076415189~hmac=730d6eecda51c577ea0c854dd17dcc5e1cc196ae0bbb36f7b7d820ef09d305f7",
     "kid": "7545e937096f5196a3c7133fdb6bb98a",
     "key": "dfa517bed8f7b4fb1676514f01625f28"
   },
@@ -25,13 +25,13 @@
   },
   {
     "id": "387",
-    "mpd": "https://bpaita7.akamaized.net/bpk-tv/irdeto_com_Channel_611/output/manifest.mpd?hdnea=st=1750541635~exp=1750542235~acl=/bpk-tv/irdeto_com_Channel_611/output/*~id=1076415189~hmac=24909984bb7d72cfad7735976a4ecff1c7294cafea6703db2380f7b0ac6b9fbe",
-    "kid": "76cba5c5f1615caea07bdcc64931c197",
-    "key": "446c1818cb45f46ebca8646caaae9719"
+    "mpd": "https://bpaita7.akamaized.net/bpk-tv/irdeto_com_Channel_611/output/manifest.mpd?hdnea=st=1750542180~exp=1750542780~acl=/bpk-tv/irdeto_com_Channel_611/output/*~id=1076415189~hmac=90438048cc8e92284fda0fa3772f4c2139b4a40cc57f5238575594350d688bab",
+    "kid": "7bfd2ae6d0345c26b2f589a5786ddd62",
+    "key": "b551f2f3e77abfe555e1a5dc3e73f76d"
   },
   {
     "id": "388",
-    "mpd": "https://bpaita6.akamaized.net/bpk-tv/irdeto_com_Channel_608/output/manifest.mpd?hdnea=st=1750541639~exp=1750542239~acl=/bpk-tv/irdeto_com_Channel_608/output/*~id=1076415189~hmac=69e610c9617f6afebd6748a539fd2faed2db6cd4ff0456ee178f40a5ae5c3bac",
+    "mpd": "https://bpaita6.akamaized.net/bpk-tv/irdeto_com_Channel_608/output/manifest.mpd?hdnea=st=1750542186~exp=1750542786~acl=/bpk-tv/irdeto_com_Channel_608/output/*~id=1076415189~hmac=6b0a0cffde3ca93fa140094065e3fe81c4da8da857630df702001a94b9185a67",
     "kid": "e7117dc201b1599d99744f24f3b856f2",
     "key": "87848f00a8fb0cbbb55749e9d875008b"
   },
@@ -49,25 +49,25 @@
   },
   {
     "id": "688",
-    "mpd": "https://delta.tatasky.net/bpk-tv/irdeto_com_Channel_929/output/manifest.mpd",
+    "mpd": "Not found",
     "kid": "Not found",
     "key": "Not found"
   },
   {
     "id": "1068",
-    "mpd": "https://delta.tatasky.net/bpk-tv/irdeto_com_Channel_1882/output/manifest.mpd",
+    "mpd": "Not found",
     "kid": "Not found",
     "key": "Not found"
   },
   {
     "id": "265",
-    "mpd": "https://delta6tatasky.akamaized.net/bpk-tv/irdeto_com_Channel_752/output/manifest.mpd",
+    "mpd": "Not found",
     "kid": "Not found",
     "key": "Not found"
   },
   {
     "id": "1060",
-    "mpd": "https://server.livelegitpro.in/livepunjabi/livepunjabi/index.mpd",
+    "mpd": "Not found",
     "kid": "Not found",
     "key": "Not found"
   },
@@ -79,25 +79,25 @@
   },
   {
     "id": "119",
-    "mpd": "https://bpaita6.akamaized.net/bpk-tv/irdeto_com_Channel_130/output/manifest.mpd?hdnea=st=1750541659~exp=1750542259~acl=/bpk-tv/irdeto_com_Channel_130/output/*~id=1076415189~hmac=6af3836c61fdec748e3651fc507e74050f4aa500b22c28189bbce26c23e96d65",
+    "mpd": "Not found",
     "kid": "7dfcc218e7ec5e3ab5493cc2258b6cdb",
     "key": "5a4182ef4643cf363dd3d8814b3a13fc"
   },
   {
     "id": "219",
-    "mpd": "https://bpaita2.akamaized.net/bpk-tv/irdeto_com_Channel_128/output/manifest.mpd?hdnea=st=1750541420~exp=1750542020~acl=/bpk-tv/irdeto_com_Channel_128/output/*~id=1076415189~hmac=6370ab0c56006a8a18a176aeb04fcf53a11b0ea260e9c1a40ff10d9272250ed2",
+    "mpd": "https://bpaita2.akamaized.net/bpk-tv/irdeto_com_Channel_128/output/manifest.mpd?hdnea=st=1750542198~exp=1750542798~acl=/bpk-tv/irdeto_com_Channel_128/output/*~id=1076415189~hmac=385bfd305710d07d0d767edb248174f29f3b522c6b3dbfb43416b131be880878",
     "kid": "Not found",
     "key": "Not found"
   },
   {
     "id": "341",
-    "mpd": "https://bpaita6.akamaized.net/bpk-tv/irdeto_com_Channel_530/output/manifest.mpd?hdnea=st=1750541424~exp=1750542024~acl=/bpk-tv/irdeto_com_Channel_530/output/*~id=1076415189~hmac=edc5ca448caca7020574259aa4fc9e4ae1ddb236a5cd82783b41975b40d66282",
+    "mpd": "https://bpaita6.akamaized.net/bpk-tv/irdeto_com_Channel_530/output/manifest.mpd?hdnea=st=1750542202~exp=1750542802~acl=/bpk-tv/irdeto_com_Channel_530/output/*~id=1076415189~hmac=f504a5cebb06d1f530b4ea0f1cc188ed8e513e01aefb9a1348e5c9cf9ba16c7d",
     "kid": "a29c2dc2034851e8ab70c93513b36a86",
     "key": "cd0d6bb26fb54667dd456ac4f9be02ed"
   },
   {
     "id": "1276",
-    "mpd": "https://bpaita5.akamaized.net/bpk-tv/irdeto_com_Channel_2056/output/manifest.mpd?hdnea=st=1750541666~exp=1750542266~acl=/bpk-tv/irdeto_com_Channel_2056/output/*~id=1076415189~hmac=4557d4583fe844a773a0f85295b4367cbe66b76939b70f3e4a5009b058f7e8da",
+    "mpd": "Not found",
     "kid": "6669e4ba95c65279b5be045d1a7e14ed",
     "key": "53112a4446430b6adda0828c3a82e100"
   },
@@ -127,25 +127,25 @@
   },
   {
     "id": "250",
-    "mpd": "https://bpaita3.akamaized.net/bpk-tv/irdeto_com_Channel_415/output/manifest.mpd?hdnea=st=1750541678~exp=1750542278~acl=/bpk-tv/irdeto_com_Channel_415/output/*~id=1076415189~hmac=33eea4603952a59319e23876856f3baacd65678b34564e56c46b8183644593f8",
+    "mpd": "https://bpaita3.akamaized.net/bpk-tv/irdeto_com_Channel_415/output/manifest.mpd?hdnea=st=1750542248~exp=1750542848~acl=/bpk-tv/irdeto_com_Channel_415/output/*~id=1076415189~hmac=21e900cd1ca1dfc2fba48b95b115dbe6ce85845aa009e8734d5588b39f70f761",
     "kid": "0501748f57e953a7a49f7d7035bcbdb5",
     "key": "a9c5875dbcac2f856c72d4a6fbe5a8e0"
   },
   {
     "id": "635",
-    "mpd": "Not found",
+    "mpd": "https://bpaita3.akamaized.net/bpk-tv/irdeto_com_Channel_873/output/manifest.mpd?hdnea=st=1750542251~exp=1750542851~acl=/bpk-tv/irdeto_com_Channel_873/output/*~id=1076415189~hmac=8fe3beb2f0de516421f2d5f880abc8ed1bc1847c758d526740ba0c41e1ca917a",
     "kid": "8033d4de5420559fa5963508b0089653",
     "key": "698f62baa34de8612d983bd9089f46ad"
   },
   {
     "id": "252",
-    "mpd": "Not found",
+    "mpd": "https://bpaita3.akamaized.net/bpk-tv/irdeto_com_Channel_416/output/manifest.mpd?hdnea=st=1750542254~exp=1750542854~acl=/bpk-tv/irdeto_com_Channel_416/output/*~id=1076415189~hmac=85002847acbd7a5ce50a86329ea724e4231273d86decf7f9c8fbb8865520d4ec",
     "kid": "e8d7834c0e335c3ca0cd3bd8898719ac",
     "key": "23006ccfd67daa620b315727b9731342"
   },
   {
     "id": "636",
-    "mpd": "Not found",
+    "mpd": "https://bpaita6.akamaized.net/bpk-tv/irdeto_com_Channel_871/output/manifest.mpd?hdnea=st=1750542257~exp=1750542857~acl=/bpk-tv/irdeto_com_Channel_871/output/*~id=1076415189~hmac=4148364747c1b88509cf70599e5bf0fe85e16cb687f63346a7774f5d6026ac20",
     "kid": "6dd4746e817453959dda694773703955",
     "key": "abd0af93cc71b81a8fabbb1d3fe5bf97"
   }
