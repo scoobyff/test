@@ -1,9 +1,9 @@
 [
   {
     "id": "460",
-    "mpd": "https://bpaita5.akamaized.net/bpk-tv/irdeto_com_Channel_722/output/manifest.mpd?hdnea=st=1750852203~exp=1750852803~acl=/bpk-tv/irdeto_com_Channel_722/output/*~id=1076415189~hmac=77033d7c6e9a656605ff32c81aa5b3b560ee932fe56b13f4f5dc084a3c2d06f3",
-    "kid": "ea584d88a09051deb8dc279406280fb7",
-    "key": "2fd8840c6e755dafb5b19aceffa58afb"
+    "mpd": "Not found",
+    "kid": "3607b82e2f9c557285daff66cc7e772f",
+    "key": "1026115a1bda45640dd6f28aa51b5cfb"
   },
   {
     "id": "158",
@@ -13,7 +13,7 @@
   },
   {
     "id": "45",
-    "mpd": "Not found",
+    "mpd": "https://bpaita3.akamaized.net/bpk-tv/irdeto_com_Channel_365/output/manifest.mpd?hdnea=st=1750852443~exp=1750853043~acl=/bpk-tv/irdeto_com_Channel_365/output/*~id=1076415189~hmac=0d494307e35952e86f0a9f318aaae551d2305ab1c283eda15321d0bc20a3561a",
     "kid": "caa81a466192539e9ef137eb97f77ae1",
     "key": "9303d50285d9f33a5b633f22f5678e02"
   },
@@ -43,13 +43,13 @@
   },
   {
     "id": "538",
-    "mpd": "Not found",
+    "mpd": "https://delta.tatasky.net/bpk-tv/irdeto_com_Channel_613/output/manifest.mpd",
     "kid": "Not found",
     "key": "Not found"
   },
   {
     "id": "688",
-    "mpd": "Not found",
+    "mpd": "https://delta.tatasky.net/bpk-tv/irdeto_com_Channel_929/output/manifest.mpd",
     "kid": "Not found",
     "key": "Not found"
   },
@@ -91,15 +91,15 @@
   },
   {
     "id": "341",
-    "mpd": "https://bpaita6.akamaized.net/bpk-tv/irdeto_com_Channel_530/output/manifest.mpd?hdnea=st=1750851901~exp=1750852501~acl=/bpk-tv/irdeto_com_Channel_530/output/*~id=1076415189~hmac=1f03e2f3de97231ccd4c55a1225cb3c6d149aa729ccd766020d4d30705f6651b",
+    "mpd": "Not found",
     "kid": "db850f3581a45ad2b19e38d6c1f31ea2",
     "key": "15960c545e70a98ed747da9843ae5479"
   },
   {
     "id": "1276",
     "mpd": "Not found",
-    "kid": "cf7f67819c5f579ea38513dee3cb096c",
-    "key": "a480a34bca3ecb90990699e66f3b065c"
+    "kid": "13df64e234ea5675962d730f7dc97ce1",
+    "key": "898daac9131d9c7cfc8d143cfcbfae02"
   },
   {
     "id": "914",
@@ -115,13 +115,13 @@
   },
   {
     "id": "1496",
-    "mpd": "Not found",
+    "mpd": "dummy",
     "kid": "Not found",
     "key": "Not found"
   },
   {
     "id": "1186",
-    "mpd": "Not found",
+    "mpd": "https://bpprod1linear.akamaized.net//bpk-tv/irdeto_com_Channel_1965/output/manifest.mpd",
     "kid": "Not found",
     "key": "Not found"
   },
