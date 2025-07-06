@@ -1,21 +1,21 @@
 [
   {
     "id": "460",
-    "mpd": "https://bpaita5.akamaized.net/bpk-tv/irdeto_com_Channel_722/output/manifest.mpd?hdnea=st=1751823854~exp=1751824454~acl=/bpk-tv/irdeto_com_Channel_722/output/*~id=1076415189~hmac=bd208540520524a0eafea1ac2f26a536779fb458288a81fdfa77e9fd262e37e4",
+    "mpd": "https://bpaita5.akamaized.net/bpk-tv/irdeto_com_Channel_722/output/manifest.mpd?hdnea=st=1751824344~exp=1751824944~acl=/bpk-tv/irdeto_com_Channel_722/output/*~id=1076415189~hmac=424d01a2d8f418806871db48dde9694a091082f43f2cf14cb465c09bdb28cae2",
     "kid": "1c0af1393c5355e1942a3cee82956c83",
     "key": "cf387e695bfbff55662611ce9e800e05"
   },
   {
     "id": "158",
-    "mpd": "https://bpaita7.akamaized.net/bpk-tv/irdeto_com_Channel_400/output/manifest.mpd?hdnea=st=1751823856~exp=1751824456~acl=/bpk-tv/irdeto_com_Channel_400/output/*~id=1076415189~hmac=4ae1a05be2ad97a6114f78d1d0611847cb28eb0784a9ea5a4082be864dc6a38f",
+    "mpd": "https://bpaita7.akamaized.net/bpk-tv/irdeto_com_Channel_400/output/manifest.mpd?hdnea=st=1751824347~exp=1751824947~acl=/bpk-tv/irdeto_com_Channel_400/output/*~id=1076415189~hmac=7cd88ef7392c278e2edea7039517233fcb766184081e17f26b5c2819eec31225",
     "kid": "ed1f16e6c7ff5f6382892202d48c8c81",
     "key": "b3bf7d1979f1dbc36e010110b96b1c2b"
   },
   {
     "id": "45",
-    "mpd": "https://bpaita3.akamaized.net/bpk-tv/irdeto_com_Channel_365/output/manifest.mpd?hdnea=st=1751823859~exp=1751824459~acl=/bpk-tv/irdeto_com_Channel_365/output/*~id=1076415189~hmac=9a2f067a615c7d1d99f4a10ad9375298fcf141557ba3f1fa45f05956ee70cd0e",
-    "kid": "71f2f0a1dd105672a165f0b1fcbf68c5",
-    "key": "4962499cd075de813ae753809cfa5e73"
+    "mpd": "https://bpaita3.akamaized.net/bpk-tv/irdeto_com_Channel_365/output/manifest.mpd?hdnea=st=1751824350~exp=1751824950~acl=/bpk-tv/irdeto_com_Channel_365/output/*~id=1076415189~hmac=d05084a44b1b570b8d43d1f85a49b2280e974b181ef446367de3c34c32686a2e",
+    "kid": "bb529c8362dd5f97a58f905b699f1095",
+    "key": "a96ce37810e05c7fdec4050e05eb1734"
   },
   {
     "id": "277",
@@ -25,15 +25,27 @@
   },
   {
     "id": "387",
-    "mpd": "https://bpaita7.akamaized.net/bpk-tv/irdeto_com_Channel_611/output/manifest.mpd?hdnea=st=1751823864~exp=1751824464~acl=/bpk-tv/irdeto_com_Channel_611/output/*~id=1076415189~hmac=783ed9609c23e26fdbf1d1e5e6858bbf72b3dfb5473630fcb457a97252f37442",
+    "mpd": "https://bpaita7.akamaized.net/bpk-tv/irdeto_com_Channel_611/output/manifest.mpd?hdnea=st=1751824362~exp=1751824962~acl=/bpk-tv/irdeto_com_Channel_611/output/*~id=1076415189~hmac=dd358fdfbd8a14d9ea9b55e8fb5afc78b7154c69b074bf68429ab1b7d8e55f56",
     "kid": "6c69574e7dd9529c91972409bd69f475",
     "key": "b339fa1bbe0aa3521c9afd197a398254"
   },
   {
     "id": "388",
-    "mpd": "https://bpaita6.akamaized.net/bpk-tv/irdeto_com_Channel_608/output/manifest.mpd?hdnea=st=1751823866~exp=1751824466~acl=/bpk-tv/irdeto_com_Channel_608/output/*~id=1076415189~hmac=55ef9b92c6e316f43dbf12dfa3f3e7c6e48cc7816c7d64db7d2c3a96066971fa",
+    "mpd": "https://bpaita6.akamaized.net/bpk-tv/irdeto_com_Channel_608/output/manifest.mpd?hdnea=st=1751824364~exp=1751824964~acl=/bpk-tv/irdeto_com_Channel_608/output/*~id=1076415189~hmac=b11afb85c3199dbc96cc49aee927ce7f76280165b0a4a938decea8f1062b3368",
     "kid": "63d8587dde2f5ddc87a982a0c71c72e0",
     "key": "2370d145c41e67ee00f7a9af3c64dfb2"
+  },
+  {
+    "id": "389",
+    "mpd": "https://delta.tatasky.net/bpk-tv/irdeto_com_Channel_612/output/manifest.mpd",
+    "kid": "Not found",
+    "key": "Not found"
+  },
+  {
+    "id": "538",
+    "mpd": "https://delta.tatasky.net/bpk-tv/irdeto_com_Channel_613/output/manifest.mpd",
+    "kid": "Not found",
+    "key": "Not found"
   },
   {
     "id": "688",
@@ -92,6 +104,18 @@
   {
     "id": "914",
     "mpd": "https://delta31tatasky.akamaized.net/bpk-tv/irdeto_com_Channel_1319/output/manifest.mpd",
+    "kid": "Not found",
+    "key": "Not found"
+  },
+  {
+    "id": "1192",
+    "mpd": "https://delta.tatasky.net/bpk-tv/irdeto_com_Channel_1970/output/manifest.mpd",
+    "kid": "Not found",
+    "key": "Not found"
+  },
+  {
+    "id": "1496",
+    "mpd": "dummy",
     "kid": "Not found",
     "key": "Not found"
   },
