@@ -366,9 +366,8 @@
         <div class="service-selector">
             <label for="ocrService">OCR Service: </label>
             <select id="ocrService">
-                <option value="google">Google Vision API (Free)</option>
-                <option value="azure">Azure Computer Vision (Free)</option>
-                <option value="ocr-space">OCR.space (Backup)</option>
+                <option value="ocr-space">OCR.space (Free)</option>
+                <option value="tesseract">Tesseract.js (Local)</option>
             </select>
         </div>
 
@@ -377,8 +376,8 @@
                 <div class="upload-icon">📁</div>
                 <div class="upload-text">Click here or drag & drop images</div>
                 <div class="upload-subtext">Supports JPG, PNG, GIF, WebP formats</div>
-                <input type="file" id="imageInput" accept="image/*" multiple>
             </div>
+            <input type="file" id="imageInput" accept="image/*" multiple>
         </div>
 
         <div class="processing-section">
@@ -409,6 +408,7 @@
 
     <div class="toast" id="toast"></div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/tesseract.min.js"></script>
     <script>
         const uploadArea = document.getElementById('uploadArea');
         const imageInput = document.getElementById('imageInput');
@@ -419,15 +419,21 @@
 
         let processedImages = [];
 
-        // Upload area events
-        uploadArea.addEventListener('click', () => imageInput.click());
+        // Fixed upload area click event
+        uploadArea.addEventListener('click', (e) => {
+            e.preventDefault();
+            imageInput.click();
+        });
+
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadArea.classList.add('dragover');
         });
+
         uploadArea.addEventListener('dragleave', () => {
             uploadArea.classList.remove('dragover');
         });
+
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.classList.remove('dragover');
@@ -441,10 +447,14 @@
         });
 
         function handleFiles(files) {
-            files.forEach(file => {
-                if (file.type.startsWith('image/')) {
-                    processImage(file);
-                }
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            if (imageFiles.length === 0) {
+                showToast('Please select valid image files', 'error');
+                return;
+            }
+
+            imageFiles.forEach(file => {
+                processImage(file);
             });
             clearBtn.style.display = 'block';
         }
@@ -497,10 +507,8 @@
                 let text = '';
                 const selectedService = ocrService.value;
                 
-                if (selectedService === 'google') {
-                    text = await extractWithGoogleVision(file, progressEl);
-                } else if (selectedService === 'azure') {
-                    text = await extractWithAzureVision(file, progressEl);
+                if (selectedService === 'tesseract') {
+                    text = await extractWithTesseract(file, progressEl);
                 } else {
                     text = await extractWithOCRSpace(file, progressEl);
                 }
@@ -529,70 +537,22 @@
                 statusEl.className = 'image-status status-error';
                 statusEl.textContent = 'Processing failed';
                 linksEl.innerHTML = `<div class="no-links">Error: ${error.message}</div>`;
+                showToast('OCR processing failed', 'error');
             }
         }
 
-        async function extractWithGoogleVision(file, progressEl) {
-            // Using Google Vision API (free tier)
-            const base64 = await fileToBase64(file);
-            progressEl.style.width = '40%';
-            
-            const response = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    requests: [{
-                        image: { content: base64.split(',')[1] },
-                        features: [{ type: 'TEXT_DETECTION' }]
-                    }]
-                })
+        async function extractWithTesseract(file, progressEl) {
+            return new Promise((resolve, reject) => {
+                Tesseract.recognize(file, 'eng', {
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            progressEl.style.width = `${20 + (m.progress * 50)}%`;
+                        }
+                    }
+                }).then(({ data: { text } }) => {
+                    resolve(text);
+                }).catch(reject);
             });
-            
-            progressEl.style.width = '70%';
-            const result = await response.json();
-            
-            if (result.responses && result.responses[0].textAnnotations) {
-                return result.responses[0].textAnnotations[0].description;
-            }
-            throw new Error('No text detected');
-        }
-
-        async function extractWithAzureVision(file, progressEl) {
-            // Using Azure Computer Vision (free tier)
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            progressEl.style.width = '40%';
-            
-            const response = await fetch('https://eastus.api.cognitive.microsoft.com/vision/v3.2/ocr', {
-                method: 'POST',
-                headers: {
-                    'Ocp-Apim-Subscription-Key': 'your-azure-key', // Users need to add their own
-                },
-                body: formData
-            });
-            
-            progressEl.style.width = '70%';
-            const result = await response.json();
-            
-            let text = '';
-            if (result.regions) {
-                result.regions.forEach(region => {
-                    region.lines.forEach(line => {
-                        line.words.forEach(word => {
-                            text += word.text + ' ';
-                        });
-                        text += '\n';
-                    });
-                });
-            }
-            
-            if (text.trim()) {
-                return text;
-            }
-            throw new Error('No text detected');
         }
 
         async function extractWithOCRSpace(file, progressEl) {
@@ -601,38 +561,31 @@
             formData.append('language', 'eng');
             formData.append('isOverlayRequired', 'false');
             formData.append('OCREngine', '2');
-            formData.append('filetype', file.type);
             
             progressEl.style.width = '40%';
             
-            const response = await fetch('https://api.ocr.space/parse/image', {
-                method: 'POST',
-                headers: {
-                    'apikey': 'K87899142388957'
-                },
-                body: formData
-            });
-            
-            progressEl.style.width = '70%';
-            const result = await response.json();
-            
-            if (result.IsErroredOnProcessing) {
-                throw new Error(result.ErrorMessage || 'OCR processing failed');
+            try {
+                const response = await fetch('https://api.ocr.space/parse/image', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': 'K87899142388957'
+                    },
+                    body: formData
+                });
+                
+                progressEl.style.width = '70%';
+                const result = await response.json();
+                
+                if (result.IsErroredOnProcessing) {
+                    throw new Error(result.ErrorMessage || 'OCR processing failed');
+                }
+                
+                return result.ParsedResults[0].ParsedText;
+            } catch (error) {
+                throw new Error('OCR service unavailable');
             }
-            
-            return result.ParsedResults[0].ParsedText;
         }
 
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-        }
-
-       
         function extractLinks(text) {
             const links = [];
             
