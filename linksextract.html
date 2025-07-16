@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Link Extractor</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -307,6 +307,9 @@
         <div class="header">
             <h1>🔗 Image Link Extractor</h1>
             <p>Upload images containing links and extract .mpd, .m3u8, .mp4, .mkv and other URLs</p>
+            <div style="background: rgba(255, 193, 7, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                <small style="color: #856404;">✨ Using OCR.space API for accurate text extraction</small>
+            </div>
         </div>
 
         <div class="upload-section">
@@ -428,26 +431,42 @@
                 const progressEl = document.getElementById(`progress-${imageId}`);
                 const linksEl = document.getElementById(`links-${imageId}`);
                 
-                // Initialize Tesseract
-                const worker = await Tesseract.createWorker();
-                await worker.loadLanguage('eng');
-                await worker.initialize('eng');
+                // Update progress to 30%
+                progressEl.style.width = '30%';
                 
-                // Progress updates
-                const updateProgress = (progress) => {
-                    progressEl.style.width = `${progress * 100}%`;
-                };
+                // Convert base64 to blob
+                const response = await fetch(imageData);
+                const blob = await response.blob();
                 
-                // OCR processing
-                const { data: { text } } = await worker.recognize(imageData, {
-                    logger: m => {
-                        if (m.status === 'recognizing text') {
-                            updateProgress(m.progress);
-                        }
-                    }
+                // Create FormData for API request
+                const formData = new FormData();
+                formData.append('file', blob);
+                formData.append('language', 'eng');
+                formData.append('isOverlayRequired', 'false');
+                formData.append('OCREngine', '2');
+                
+                // Update progress to 50%
+                progressEl.style.width = '50%';
+                
+                // Make API request to OCR.space
+                const apiResponse = await fetch('https://api.ocr.space/parse/image', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': 'K87899142388957'  // Free API key
+                    },
+                    body: formData
                 });
                 
-                await worker.terminate();
+                // Update progress to 80%
+                progressEl.style.width = '80%';
+                
+                const result = await apiResponse.json();
+                
+                if (result.IsErroredOnProcessing) {
+                    throw new Error(result.ErrorMessage || 'OCR processing failed');
+                }
+                
+                const text = result.ParsedResults[0].ParsedText;
                 
                 // Extract links from text
                 const links = extractLinks(text);
@@ -472,8 +491,8 @@
                 const linksEl = document.getElementById(`links-${imageId}`);
                 
                 statusEl.className = 'image-status status-error';
-                statusEl.textContent = 'Processing failed';
-                linksEl.innerHTML = '<div class="no-links">Error processing image</div>';
+                statusEl.textContent = 'Processing failed: ' + error.message;
+                linksEl.innerHTML = '<div class="no-links">Error processing image. Please try again.</div>';
             }
         }
 
