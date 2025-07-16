@@ -589,33 +589,78 @@
         function extractLinks(text) {
             const links = [];
             
+            // Clean the text - remove extra spaces and normalize line breaks
+            const cleanText = text.replace(/\s+/g, ' ').replace(/\n/g, ' ');
+            
             // Enhanced regex patterns for better link detection
             const patterns = [
-                // HTTP/HTTPS URLs with media extensions
-                /https?:\/\/[^\s<>"{}|\\^`[\]]+\.(mpd|m3u8|mp4|mkv|avi|mov|wmv|flv|webm|ts|m4v|3gp|ogg)/gi,
-                // URLs with streaming endpoints
-                /https?:\/\/[^\s<>"{}|\\^`[\]]+\/[^\s]*\.(mpd|m3u8|mp4|mkv|avi|mov|wmv|flv|webm|ts|m4v|3gp|ogg)/gi,
-                // General HTTP/HTTPS URLs
+                // HTTP/HTTPS URLs with media extensions (priority pattern)
+                /https?:\/\/[^\s<>"{}|\\^`[\]]+\.(mpd|m3u8|mp4|mkv|avi|mov|wmv|flv|webm|ts|m4v|3gp|ogg)(?:[^\s<>"{}|\\^`[\]]*)?/gi,
+                // URLs with streaming endpoints and paths
+                /https?:\/\/[^\s<>"{}|\\^`[\]]+\/[^\s<>"{}|\\^`[\]]*\.(mpd|m3u8|mp4|mkv|avi|mov|wmv|flv|webm|ts|m4v|3gp|ogg)(?:[^\s<>"{}|\\^`[\]]*)?/gi,
+                // General HTTP/HTTPS URLs (longer matches preferred)
                 /https?:\/\/[^\s<>"{}|\\^`[\]]+/gi,
                 // FTP URLs
                 /ftp:\/\/[^\s<>"{}|\\^`[\]]+/gi,
                 // URLs without protocol but with media extensions
-                /[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\/[^\s]*\.(mpd|m3u8|mp4|mkv|avi|mov|wmv|flv|webm|ts|m4v|3gp|ogg)/gi
+                /[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\/[^\s<>"{}|\\^`[\]]*\.(mpd|m3u8|mp4|mkv|avi|mov|wmv|flv|webm|ts|m4v|3gp|ogg)(?:[^\s<>"{}|\\^`[\]]*)?/gi
             ];
             
+            // Also try to reconstruct broken URLs
+            const reconstructedText = reconstructBrokenUrls(cleanText);
+            
             patterns.forEach(pattern => {
-                const matches = text.match(pattern);
-                if (matches) {
-                    matches.forEach(match => {
-                        const cleanLink = match.trim();
-                        if (cleanLink && !links.includes(cleanLink)) {
-                            links.push(cleanLink);
-                        }
-                    });
-                }
+                // Check both original and reconstructed text
+                [cleanText, reconstructedText].forEach(textToSearch => {
+                    const matches = textToSearch.match(pattern);
+                    if (matches) {
+                        matches.forEach(match => {
+                            let cleanLink = match.trim();
+                            
+                            // Remove trailing punctuation that might not be part of URL
+                            cleanLink = cleanLink.replace(/[.,;:!?]+$/, '');
+                            
+                            // Remove common trailing words that might get included
+                            cleanLink = cleanLink.replace(/\s+(and|or|the|to|from|with|by|in|on|at|for).*$/i, '');
+                            
+                            if (cleanLink && cleanLink.length > 10 && !links.includes(cleanLink)) {
+                                links.push(cleanLink);
+                            }
+                        });
+                    }
+                });
             });
             
-            return links;
+            // Remove duplicates and sort by length (longer URLs first)
+            const uniqueLinks = [...new Set(links)];
+            return uniqueLinks.sort((a, b) => b.length - a.length);
+        }
+        
+        function reconstructBrokenUrls(text) {
+            // Try to reconstruct URLs that might be broken across lines
+            let reconstructed = text;
+            
+            // Look for URL patterns that might be split
+            const urlParts = [
+                // Common URL reconstruction patterns
+                /https?:\/\/[^\s]+\s+[^\s]+\.(mpd|m3u8|mp4|mkv|avi|mov|wmv|flv|webm|ts|m4v|3gp|ogg)/gi,
+                /https?:\/\/[^\s]+\s+\/[^\s]+/gi,
+                /https?:\/\/[^\s]+\.[^\s]+\s+\/[^\s]+/gi
+            ];
+            
+            urlParts.forEach(pattern => {
+                reconstructed = reconstructed.replace(pattern, match => {
+                    return match.replace(/\s+/g, '');
+                });
+            });
+            
+            // Specifically look for streaming URLs patterns
+            reconstructed = reconstructed.replace(
+                /(https?:\/\/[^\s]+)\s+([^\s]*\.(mpd|m3u8|mp4|mkv|avi|mov|wmv|flv|webm|ts|m4v|3gp|ogg)[^\s]*)/gi,
+                '$1$2'
+            );
+            
+            return reconstructed;
         }
 
         function displayLinks(links, container) {
@@ -688,3 +733,4 @@
     </script>
 </body>
 </html>
+                            
