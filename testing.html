@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Scooby Streaming Hub</title>
 <style>
-/* --- [All your existing CSS unchanged] --- */
+/* ---- your original CSS exactly as it was ---- */
 </style>
 </head>
 <body>
@@ -20,7 +20,25 @@
 </div>
 </div>
 
+<!-- Maintenance Popup -->
+<div class="popup-overlay" id="maintenance-popup">
+<div class="popup-content">
+<h2 class="popup-title"> SERVER IN MAINTENANCE TO BE AVAILABLE SOON </h2>
+<div class="maintenance-icon">🛠️</div>
+<p>We're currently improving our streaming services to provide you with a better experience.</p>
+<p>Expected to be back at 6:30 PM IST.</p>
+<p class="popup-welcome-msg" id="maintenance-time-popup"></p>
+</div>
+</div>
+
 <div class="container" id="main-content">
+<!-- Top Ad Space -->
+<div class="ad-space" id="top-ad">
+<span class="ad-label">AD</span>
+<a href="https://t.me/+u8PDYVT92MA3MTg9" onclick="trackAdClick('top-ad')" target="_blank">
+<img alt="Advertisement" src="https://i.postimg.cc/D4FJcKPY/images.png"/>
+</a>
+</div>
 <header>
 <h1>Scooby Streaming Hub</h1>
 <div>
@@ -29,22 +47,54 @@
 </div>
 </header>
 
+<!-- Broadcast Message Section -->
+<div class="broadcast-container" id="broadcast-container">
+<h3 class="broadcast-title">Broadcast Message</h3>
+<p class="broadcast-message" id="broadcast-message"></p>
+</div>
+
 <div class="watch-time-container">
 <div class="watch-time-label">YOUR WATCH TIME</div>
 <div class="watch-time-value" id="watch-time">00:00:00</div>
 </div>
 
+<!-- Middle Ad Space -->
+<div class="ad-space" id="middle-ad">
+<span class="ad-label">SPONSOR</span>
+<a href="https://t.me/+u8PDYVT92MA3MTg9" onclick="trackAdClick('middle-ad')" target="_blank">
+<img alt="Sponsor Advertisement" src="https://i.postimg.cc/D4FJcKPY/images.png"/>
+</a>
+</div>
+
+<!-- External Players Section -->
 <h2 class="section-title">NEED 30 SEC TO LOAD</h2>
 <div class="external-players" id="external-players"></div>
+
+<!-- Help Section -->
+<div class="help-section">
+<h3>Need Help?</h3>
+<p>If you're experiencing any issues with the streams or have questions, send us a message below:</p>
+<textarea id="help-message" placeholder="Describe your issue or ask a question..."></textarea>
+<button onclick="sendHelpMessage()">SEND MESSAGE</button>
+</div>
+
+<!-- Bottom Ad Space -->
+<div class="ad-space" id="bottom-ad">
+<span class="ad-label">AD</span>
+<a href="https://t.me/+u8PDYVT92MA3MTg9" onclick="trackAdClick('bottom-ad')" target="_blank">
+<img alt="Advertisement" src="https://i.postimg.cc/D4FJcKPY/images.png"/>
+</a>
+</div>
 </div>
 
 <script>
-const TELEGRAM_BOT_TOKEN = "7285268410:AAGpod5K5snsYq9FWAYTzUryW3lsHx3L5Oc"; // Replace
-const TELEGRAM_CHAT_ID = "1572380763";     // Replace
+const TELEGRAM_BOT_TOKEN = "7285268410:AAGpod5K5snsYq9FWAYTzUryW3lsHx3L5Oc"; // replace
+const TELEGRAM_CHAT_ID = "1572380763";     // replace
 
 let userName = "";
+let adClicks = [];
 let externalPlayerClicks = [];
-let messageId = null;
+let messageId = null; // Store Telegram message ID
 
 function getIndianTime() {
     return new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
@@ -90,10 +140,9 @@ function submitUserName() {
     document.getElementById('welcome-message').textContent = "Welcome, " + userName;
     document.getElementById('welcome-popup').style.display = 'none';
     sessionStorage.setItem('scoobyUserName', userName);
-
     const device = navigator.userAgent;
+
     const introMessage = `🚨 Scooby Viewer:\n<b>Name:</b> ${userName}\n<b>Device:</b> ${device}\n<b>Login Time:</b> ${getIndianTime()}\n\n<b>External Player Clicks:</b>\nNone yet`;
-    
     sendToTelegram(introMessage, (id) => {
         messageId = id;
     });
@@ -117,6 +166,14 @@ function trackExternalPlayer(playerName) {
         editTelegramMessage(updatedMessage);
     } else {
         sendToTelegram(updatedMessage, (id) => messageId = id);
+    }
+    return true;
+}
+
+function trackAdClick(adId) {
+    if (userName) {
+        adClicks.push({ ad: adId, time: getIndianTime() });
+        sendToTelegram(`📢 Ad Click:\nUser: ${userName}\nAd: ${adId}\nTime: ${getIndianTime()}`);
     }
     return true;
 }
