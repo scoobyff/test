@@ -762,26 +762,47 @@ window.onload = function() {
         document.getElementById('welcome-message').textContent = "Welcome, " + userName;
         document.getElementById('welcome-popup').style.display = 'none';
     }
-    fetch('https://raw.githubusercontent.com/scoobyff/test/main/scooby.json')
-        .then(res => res.json())
-        .then(data => {
-            const container = document.getElementById('external-players');
-            data.forEach(section => {
-                const h2 = document.createElement('h2');
-                h2.className = "section-title";
-                h2.textContent = section.section;
-                container.appendChild(h2);
-                section.links.forEach(link => {
-                    const a = document.createElement('a');
-                    a.href = link.url;
-                    a.textContent = link.name;
-                    a.target = "_blank";
-                    a.className = "external-player-btn";
-                    a.onclick = () => trackExternalPlayer(link.name);
-                    container.appendChild(a);
-                });
+    fetch('streams.json')
+    .then(res => res.json())
+    .then(data => {
+        const container = document.getElementById('external-players');
+
+        data.forEach(category => {
+            // Category button
+            const catBtn = document.createElement('button');
+            catBtn.className = 'category-btn';
+            catBtn.innerHTML = `
+                <img src="${category.categoryImage}" alt="${category.category}" class="category-logo">
+                <span>${category.category}</span>
+            `;
+            container.appendChild(catBtn);
+
+            // Streams container (hidden by default)
+            const streamsDiv = document.createElement('div');
+            streamsDiv.className = 'streams-container';
+            streamsDiv.style.display = 'none';
+
+            category.streams.forEach(stream => {
+                const a = document.createElement('a');
+                a.href = stream.url;
+                a.target = "_blank";
+                a.className = "external-player-btn";
+                a.onclick = () => trackExternalPlayer(stream.name);
+                a.innerHTML = `
+                    <img src="${stream.image}" alt="${stream.name}" class="stream-logo">
+                    <span>${stream.name}</span>
+                `;
+                streamsDiv.appendChild(a);
+            });
+
+            container.appendChild(streamsDiv);
+
+            // Toggle streams on category click
+            catBtn.addEventListener('click', () => {
+                streamsDiv.style.display = streamsDiv.style.display === 'none' ? 'block' : 'none';
             });
         });
+    });
 };
 </script>
 </body>
