@@ -583,6 +583,62 @@
             text-align: center;
             font-size: 24px;
         }
+#categories-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.category-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--neon-primary);
+    border-radius: 8px;
+    background-color: rgba(20, 20, 20, 0.9);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.category-btn:hover {
+    box-shadow: var(--neon-glow);
+    transform: translateY(-3px);
+}
+
+.category-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 8px;
+}
+
+#streams-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+}
+
+.stream-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--neon-secondary);
+    border-radius: 8px;
+    background-color: rgba(20, 20, 20, 0.9);
+    cursor: pointer;
+    text-align: center;
+}
+
+.stream-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 8px;
+}
     </style>
 </head>
 <body>
@@ -644,8 +700,15 @@
 </div>
 
 <!-- External Players Section -->
-<h2 class="section-title">NEED 30 SEC TO LOAD</h2>
-<div class="external-players" id="external-players"></div>
+<h2 class="section-title">Choose a Category</h2>
+
+<div id="categories-container">
+    <!-- Category cards will be inserted here from JSON -->
+</div>
+
+<div id="streams-container">
+    <!-- Streams for selected category will show here -->
+</div>
 
 <!-- Help Section -->
 <div class="help-section">
@@ -765,42 +828,32 @@ window.onload = function() {
     fetch('https://raw.githubusercontent.com/scoobyff/test/main/scooby.json')
     .then(res => res.json())
     .then(data => {
-        const container = document.getElementById('external-players');
+        const catContainer = document.getElementById('categories-container');
+        const streamsContainer = document.getElementById('streams-container');
 
         data.forEach(category => {
-            // Category button
-            const catBtn = document.createElement('button');
-            catBtn.className = 'category-btn';
-            catBtn.innerHTML = `
+            const catDiv = document.createElement('div');
+            catDiv.className = 'category-btn';
+            catDiv.innerHTML = `
                 <img src="${category.categoryImage}" alt="${category.category}" class="category-logo">
                 <span>${category.category}</span>
             `;
-            container.appendChild(catBtn);
-
-            // Streams container (hidden by default)
-            const streamsDiv = document.createElement('div');
-            streamsDiv.className = 'streams-container';
-            streamsDiv.style.display = 'none';
-
-            category.streams.forEach(stream => {
-                const a = document.createElement('a');
-                a.href = stream.url;
-                a.target = "_blank";
-                a.className = "external-player-btn";
-                a.onclick = () => trackExternalPlayer(stream.name);
-                a.innerHTML = `
-                    <img src="${stream.image}" alt="${stream.name}" class="stream-logo">
-                    <span>${stream.name}</span>
-                `;
-                streamsDiv.appendChild(a);
-            });
-
-            container.appendChild(streamsDiv);
-
-            // Toggle streams on category click
-            catBtn.addEventListener('click', () => {
-                streamsDiv.style.display = streamsDiv.style.display === 'none' ? 'block' : 'none';
-            });
+            catDiv.onclick = () => {
+                streamsContainer.innerHTML = '';
+                category.streams.forEach(stream => {
+                    const streamDiv = document.createElement('a');
+                    streamDiv.href = stream.url;
+                    streamDiv.target = "_blank";
+                    streamDiv.className = 'stream-card';
+                    streamDiv.onclick = () => trackExternalPlayer(stream.name);
+                    streamDiv.innerHTML = `
+                        <img src="${stream.image}" alt="${stream.name}">
+                        <span>${stream.name}</span>
+                    `;
+                    streamsContainer.appendChild(streamDiv);
+                });
+            };
+            catContainer.appendChild(catDiv);
         });
     });
 };
