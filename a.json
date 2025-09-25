@@ -1,0 +1,48 @@
+{
+  "channels": {
+    "1": {
+      "id": "tnt1",
+      "name": "Tnt 1",
+      "logo": "",
+      "stream": "https://ottb.live.cf.ww.aiv-cdn.net/lhr-nitro/live/dash/enc/wf8usag51e/out/v1/bd3b0c314fff4bb1ab4693358f3cd2d3/cenc.mpd",
+      "stream_type": "dash",
+      "referer": "",
+      "cookie": "",
+      "user_agent": "",
+      "drm": "5deb190b1dac28e46c0bdada7668b7de:ddd2b372702e42b0d2708a70b91dec8d"
+    },
+    "2": {
+      "id": "smax",
+      "name": "Tnt 1",
+      "logo": "",
+      "stream": "https://sundirectgo-live.pc.cdn.bitgravity.com/hd21/dth.mpd",
+      "stream_type": "dash",
+      "referer": "",
+      "cookie": "",
+      "user_agent": "",
+      "drm": "8268467a7a974698b18c9e63b13f73a4:6affb3ad6e781bc4afafad402e1d4510"
+    },
+    "3": {
+      "id": "fc",
+      "name": "Fancode",
+      "logo": "",
+      "stream": "https://in-mc-fdlive.fancode.com/mumbai/137075_english_hls_ccd31b8b6288331ta-di_h264/index.m3u8",
+      "stream_type": "hls",
+      "referer": "",
+      "cookie": "",
+      "user_agent": "",
+      "drm": ""
+    },
+    "4": {
+      "id": "atelugu",
+      "name": "Tnt 1",
+      "logo": "https://brand-websites-prod.s3.ap-south-1.amazonaws.com/sony-sports-networks-live/channel_logos/Sony%20Sports%20TEN%204%20Telugu.png",
+      "stream": "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Asia_Cup_Telugu_MOB/WDVLive/index.mpd?__hdnea__=st=1758663002~exp=1758749402~acl=/*~hmac=f87afb6b1b59bc841ce8f78bd915e99dfe334951221412f940854b82bd667a49",
+      "stream_type": "dash",
+      "referer": "https://jiotvbpkmob.cdn.jio.com/",
+      "cookie": "__hdnea__=st=1758663002~exp=1758749402~acl=/*~hmac=f87afb6b1b59bc841ce8f78bd915e99dfe334951221412f940854b82bd667a49",
+      "user_agent": "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6 YGX/69.69.69.69",
+      "drm": "b4efe4dcb98058a2a19d756a4a1f7402:b0018aea46a003d5ddc95487b875a336"
+    },
+  }
+}
