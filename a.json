@@ -1,6 +1,6 @@
 {
   "channels": {
-    "1": {
+    "tnt1": {
       "id": "tnt1",
       "name": "Tnt 1",
       "logo": "",
@@ -11,7 +11,7 @@
       "user_agent": "",
       "drm": "5deb190b1dac28e46c0bdada7668b7de:ddd2b372702e42b0d2708a70b91dec8d"
     },
-    "2": {
+    "smax": {
       "id": "smax",
       "name": "Tnt 1",
       "logo": "",
@@ -22,7 +22,7 @@
       "user_agent": "",
       "drm": "8268467a7a974698b18c9e63b13f73a4:6affb3ad6e781bc4afafad402e1d4510"
     },
-    "3": {
+    "fc": {
       "id": "fc",
       "name": "Fancode",
       "logo": "",
@@ -33,7 +33,7 @@
       "user_agent": "",
       "drm": ""
     },
-    "4": {
+    "atelugu": {
       "id": "atelugu",
       "name": "Tnt 1",
       "logo": "https://brand-websites-prod.s3.ap-south-1.amazonaws.com/sony-sports-networks-live/channel_logos/Sony%20Sports%20TEN%204%20Telugu.png",
@@ -44,38 +44,38 @@
       "user_agent": "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6 YGX/69.69.69.69",
       "drm": "b4efe4dcb98058a2a19d756a4a1f7402:b0018aea46a003d5ddc95487b875a336"
     },
-    "": {
-      "id": "",
-      "name": "",
+    "tnt4": {
+      "id": "TNT",
+      "name": "TNT",
       "logo": "",
-      "stream": "",
-      "stream_type": "",
+      "stream": "https://ottb.live.cf.ww.aiv-cdn.net/sin-nitro/live/dash/enc/i2pcjr4pe5/out/v1/912e9db56d75403b8a9ac0a719110f36/cenc.mpd",
+      "stream_type": "dash",
       "referer": "",
       "cookie": "",
       "user_agent": "",
-      "drm": ""
+      "drm": "5ccdccf0818d3d9ff6c26076fc1153ac:f8d7fda7e3f11a29b346a37e98f749d4"
     },
-    "": {
-      "id": "",
-      "name": "",
+    "tnt2": {
+      "id": "TNT",
+      "name": "TNT",
       "logo": "",
-      "stream": "",
-      "stream_type": "",
+      "stream": "https://ottb.live.cf.ww.aiv-cdn.net/lhr-nitro/live/clients/dash/enc/enniazhzls/out/v1/f8fa17f087564f51aa4d5c700be43ec4/cenc.mpd",
+      "stream_type": "dash",
       "referer": "",
       "cookie": "",
       "user_agent": "",
-      "drm": ""
+      "drm": "0d9efa8287a52a2497a281f7a9012211:e4f832d372943014fe5c30928a90e547"
     },
-    "": {
-      "id": "",
+    "astrocric": {
+      "id": "Astro",
       "name": "",
       "logo": "",
-      "stream": "",
-      "stream_type": "",
+      "stream": "https://proxy.mydementiacompanion.com.au/https://linearjitp-playback.astro.com.my/dash-wv/linear/2504/default_ott.mpd",
+      "stream_type": "dash",
       "referer": "",
       "cookie": "",
       "user_agent": "",
-      "drm": ""
+      "drm": "03c2e0af2f8159f9f0ce9b5dbc865f10:cd84ed136b0cc71f8ab8cd4d4f6a2e4c"
     },
     "": {
       "id": "",
