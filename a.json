@@ -88,24 +88,24 @@
       "user_agent": "",
       "drm": "08efc7fb107981608f7b64db5ea62469:3a6844bc9f0d9d9fd962639d7e4eb76a"
     },
-    "": {
-      "id": "",
+    "cmax": {
+      "id": "Criclife Max",
       "name": "",
       "logo": "",
-      "stream": "",
-      "stream_type": "",
+      "stream": "https://ev-fast-mpd.starzplayarabia.com/live/eds/CricLifeMax/DASH/CricLifeMax.mpd",
+      "stream_type": "dash",
       "referer": "",
       "cookie": "",
       "user_agent": "",
-      "drm": ""
+      "drm": "ad59b720bd4b44d063686212b99484b5:e1744990edf98acc729c0773a3766583"
     },
-    "": {
+    "fancode": {
       "id": "",
       "name": "",
       "logo": "",
-      "stream": "",
-      "stream_type": "",
-      "referer": "",
+      "stream": "https://livecf.fancode.com/136748_english_hls_fc072b8ba818615adfreeta-di_h264/index.m3u8",
+      "stream_type": "hls",
+      "referer": "https://fancode.com/",
       "cookie": "",
       "user_agent": "",
       "drm": ""
