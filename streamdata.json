@@ -70,12 +70,16 @@
                     }
                 }
             ],
-            "language": "BLOODY_SWEET",
-            "adfree_stream": null,
-            "dai_stream": null,
+            "language": "ENGLISH",
+            "adfree_stream": "https://livecf.fancode.com/136749_english_hls_f35067c8ca55201ta-di_h264/index.m3u8",
+            "dai_stream": "Unavailable",
             "STREAMING_CDN": {
-                "language": "BLOODY_SWEET",
-                "Primary_Playback_URL": null
+                "Primary_Playback_URL": "https://livecf.fancode.com/136749_english_hls_f35067c8ca55201ta-di_h264/index.m3u8",
+                "fancode_cdn": "https://livecf.fancode.com/136749_english_hls_f35067c8ca55201ta-di_h264/index.m3u8",
+                "dai_google_cdn": "Unavailable",
+                "cloudfront_cdn": "Unavailable",
+                "sony_cdn": "Unavailable",
+                "language": "ENGLISH"
             }
         },
                 {
@@ -117,6 +121,20 @@
                             "isBatting": false
                         }
                     }
+                }
+            ],
+            "language": "HINDI",
+            "adfree_stream": "https://livecf.fancode.com/136749_hindi_hls_490299049e17012ta-di_h264/index.m3u8",
+            "dai_stream": "Unavailable",
+            "STREAMING_CDN": {
+                "Primary_Playback_URL": "https://livecf.fancode.com/136749_hindi_hls_490299049e17012ta-di_h264/index.m3u8",
+                "fancode_cdn": "https://livecf.fancode.com/136749_hindi_hls_490299049e17012ta-di_h264/index.m3u8",
+                "dai_google_cdn": "Unavailable",
+                "cloudfront_cdn": "Unavailable",
+                "sony_cdn": "Unavailable",
+                "language": "HINDI"
+            }
+        }
                }
         
     ]
