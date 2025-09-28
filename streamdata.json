@@ -76,7 +76,7 @@
             "STREAMING_CDN": {
                 "Primary_Playback_URL": "https://livecf.fancode.com/136749_english_hls_f35067c8ca55201ta-di_h264/index.m3u8",
                 "fancode_cdn": "https://livecf.fancode.com/136749_english_hls_f35067c8ca55201ta-di_h264/index.m3u8",
-                "dai_google_cdn": "Unavailable",
+                "dai_google_cdn": "https://dai.google.com/ssai/event/BThnuo0uRi6vAZSk2UFcew/master.m3u8",
                 "cloudfront_cdn": "Unavailable",
                 "sony_cdn": "Unavailable",
                 "language": "ENGLISH"
