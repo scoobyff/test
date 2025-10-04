@@ -1,47 +1,50 @@
 {
     "Author": "DOCTOR_STRANGE",
     "name": "FanCode Live Matches API",
-    "last_updated": "06:51:41 PM 28-09-2025",
+    "last_updated": "01:30:46 AM 05-10-2025",
     "headers": {
         "User-Agent": "ReactNativeVideo/7.19.1 (Linux;Android/13) AndroidXMedia3/1.1.1",
         "Referer": "https://fancode.com/"
     },
-    "total_matches": 38,
-    "live_matches": 4,
-    "upcoming_matches": 34,
+    "total_matches": 40,
+    "live_matches": 5,
+    "upcoming_matches": 35,
     "matches": [
         {
-            "category": "Cricket",
-            "title": "India Vs Pakistan",
-            "tournament": "Asia Cup, 2025",
-            "match_id": 1,
+            "category": "Football",
+            "title": "Real Madrid Vs Villarreal Cf",
+            "tournament": "LALIGA 2025-26",
+            "match_id": 130903,
             "status": "LIVE",
-            "streamingStatus": "NOT_STARTED",
-            "startTime": "28 September 2025 08:00 PM",
+            "streamingStatus": "STARTED",
+            "startTime": "05 October 2025 12:30 AM",
             "startDate": "01 January 1970 05:30 AM",
-            "image": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_OldMatch_card.jpg",
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
             "image_cdn": {
-                "TATAPLAY": "https://images.fancode.com/aig/match/v1/136749_CASACARDS_PARTNER_16_9_1920_1080.png",
-                "APP": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_OldMatch_card.jpg",
-                "PLAYBACK": null,
-                "LOGO": "https://www.fancode.com/skillup-uploads/cms-media/Asia-Cup,-2025-(1).png",
-                "SPORTS": "https://www.fancode.com/skillup-uploads/cms-media/Cricket_Fallback_Old_match-card.jpg",
-                "BG_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_OldMatch_card.jpg",
-                "SPORT_BY_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_Match_card_opt2_1758959844413.jpg",
-                "CLOUDFARE": "https://d229kpbsb5jevy.cloudfront.net/vffancode2/aig/match/v1/136749_CASACARDS_PARTNER_16_9_1920_1080.png"
+                "TATAPLAY": "https://images.fancode.com/aig/match/v1/130903_CASACARDS_PARTNER_16_9_1920_1080.png",
+                "APP": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
+                "PLAYBACK": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
+                "LOGO": "https://www.fancode.com/skillup-uploads/cms-media/LALIGA-2025-26-Tour.png",
+                "SPORTS": "https://www.fancode.com/skillup-uploads/cms-media/Football_Fallback_Old_match-card.jpg",
+                "BG_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
+                "SPORT_BY_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-App.jpg",
+                "CLOUDFARE": "https://d229kpbsb5jevy.cloudfront.net/vffancode2/aig/match/v1/130903_CASACARDS_PARTNER_16_9_1920_1080.png"
             },
             "teams": [
                 {
-                    "name": "India",
-                    "shortName": "IND",
+                    "name": "Real Madrid",
+                    "shortName": "RM",
                     "flag": {
-                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/cr-flags/FC-IND@2x.png"
+                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/ft-flags/RM-FT2@2x.png"
                     },
                     "isWinner": null,
-                    "color": "#0f60de",
-                    "cricketScore": [],
+                    "color": "#ffdf50",
+                    "cricketScore": null,
                     "kabaddiScore": null,
-                    "footballScore": null,
+                    "footballScore": {
+                        "points": 0,
+                        "goals": []
+                    },
                     "basketBallScore": null,
                     "hockeyScore": null,
                     "status": {
@@ -51,16 +54,19 @@
                     }
                 },
                 {
-                    "name": "Pakistan",
-                    "shortName": "PAK",
+                    "name": "Villarreal CF",
+                    "shortName": "VIL",
                     "flag": {
-                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/cr-flags/FC-PAK@2x.png"
+                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/ft-flags/FC-VIL@2x.png"
                     },
                     "isWinner": null,
-                    "color": "#559830",
-                    "cricketScore": [],
+                    "color": "#ffc0cb",
+                    "cricketScore": null,
                     "kabaddiScore": null,
-                    "footballScore": null,
+                    "footballScore": {
+                        "points": 0,
+                        "goals": []
+                    },
                     "basketBallScore": null,
                     "hockeyScore": null,
                     "status": {
@@ -76,44 +82,69 @@
             "STREAMING_CDN": {
                 "Primary_Playback_URL": "https://in-mc-fdlive.fancode.com/mumbai/130903_english_hls_7acae660d754143adfreeta-di_h264/index.m3u8",
                 "fancode_cdn": "https://in-mc-fdlive.fancode.com/mumbai/130903_english_hls_7acae660d754143adfreeta-di_h264/index.m3u8",
-                "dai_google_cdn": "https://in-mc-fdlive.fancode.com/mumbai/130903_english_hls_7acae660d754143adfreeta-di_h264/index.m3u8",
+                "dai_google_cdn": "Unavailable",
                 "cloudfront_cdn": "Unavailable",
                 "sony_cdn": "Unavailable",
                 "language": "ENGLISH"
             }
         },
-                {
-            "category": "Cricket",
-            "title": "India Vs Pakistan",
-            "tournament": "Asia Cup, 2025",
-            "match_id": 2,
+        {
+            "category": "Football",
+            "title": "Real Madrid Vs Villarreal Cf",
+            "tournament": "LALIGA 2025-26",
+            "match_id": 130903,
             "status": "LIVE",
-            "streamingStatus": "NOT_STARTED",
-            "startTime": "28 September 2025 08:00 PM",
+            "streamingStatus": "STARTED",
+            "startTime": "05 October 2025 12:30 AM",
             "startDate": "01 January 1970 05:30 AM",
-            "image": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_OldMatch_card.jpg",
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
             "image_cdn": {
-                "TATAPLAY": "https://images.fancode.com/aig/match/v1/136749_CASACARDS_PARTNER_16_9_1920_1080.png",
-                "APP": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_OldMatch_card.jpg",
-                "PLAYBACK": null,
-                "LOGO": "https://www.fancode.com/skillup-uploads/cms-media/Asia-Cup,-2025-(1).png",
-                "SPORTS": "https://www.fancode.com/skillup-uploads/cms-media/Cricket_Fallback_Old_match-card.jpg",
-                "BG_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_OldMatch_card.jpg",
-                "SPORT_BY_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_Match_card_opt2_1758959844413.jpg",
-                "CLOUDFARE": "https://d229kpbsb5jevy.cloudfront.net/vffancode2/aig/match/v1/136749_CASACARDS_PARTNER_16_9_1920_1080.png"
+                "TATAPLAY": "https://images.fancode.com/aig/match/v1/130903_CASACARDS_PARTNER_16_9_1920_1080.png",
+                "APP": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
+                "PLAYBACK": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
+                "LOGO": "https://www.fancode.com/skillup-uploads/cms-media/LALIGA-2025-26-Tour.png",
+                "SPORTS": "https://www.fancode.com/skillup-uploads/cms-media/Football_Fallback_Old_match-card.jpg",
+                "BG_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
+                "SPORT_BY_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-App.jpg",
+                "CLOUDFARE": "https://d229kpbsb5jevy.cloudfront.net/vffancode2/aig/match/v1/130903_CASACARDS_PARTNER_16_9_1920_1080.png"
             },
             "teams": [
                 {
-                    "name": "India",
-                    "shortName": "IND",
+                    "name": "Real Madrid",
+                    "shortName": "RM",
                     "flag": {
-                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/cr-flags/FC-IND@2x.png"
+                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/ft-flags/RM-FT2@2x.png"
                     },
                     "isWinner": null,
-                    "color": "#0f60de",
-                    "cricketScore": [],
+                    "color": "#ffdf50",
+                    "cricketScore": null,
                     "kabaddiScore": null,
-                    "footballScore": null,
+                    "footballScore": {
+                        "points": 0,
+                        "goals": []
+                    },
+                    "basketBallScore": null,
+                    "hockeyScore": null,
+                    "status": {
+                        "cricket": {
+                            "isBatting": false
+                        }
+                    }
+                },
+                {
+                    "name": "Villarreal CF",
+                    "shortName": "VIL",
+                    "flag": {
+                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/ft-flags/FC-VIL@2x.png"
+                    },
+                    "isWinner": null,
+                    "color": "#ffc0cb",
+                    "cricketScore": null,
+                    "kabaddiScore": null,
+                    "footballScore": {
+                        "points": 0,
+                        "goals": []
+                    },
                     "basketBallScore": null,
                     "hockeyScore": null,
                     "status": {
@@ -124,49 +155,74 @@
                 }
             ],
             "language": "HINDI",
-            "adfree_stream": "https://in-mc-fdlive.fancode.com/mumbai/130903_english_hls_7acae660d754143adfreeta-di_h264/index.m3u8",
+            "adfree_stream": "https://in-mc-fdlive.fancode.com/mumbai/130903_hindi_hls_3f147dcba151412adfreeta-di_h264/index.m3u8",
             "dai_stream": "Unavailable",
             "STREAMING_CDN": {
-                "Primary_Playback_URL": "https://in-mc-fdlive.fancode.com/mumbai/130903_english_hls_7acae660d754143adfreeta-di_h264/index.m3u8",
-                "fancode_cdn": "https://in-mc-fdlive.fancode.com/mumbai/130903_english_hls_7acae660d754143adfreeta-di_h264/index.m3u8",
+                "Primary_Playback_URL": "https://in-mc-fdlive.fancode.com/mumbai/130903_hindi_hls_3f147dcba151412adfreeta-di_h264/index.m3u8",
+                "fancode_cdn": "https://in-mc-fdlive.fancode.com/mumbai/130903_hindi_hls_3f147dcba151412adfreeta-di_h264/index.m3u8",
                 "dai_google_cdn": "Unavailable",
                 "cloudfront_cdn": "Unavailable",
                 "sony_cdn": "Unavailable",
                 "language": "HINDI"
             }
         },
-                        {
-            "category": "Cricket",
-            "title": "India Vs Pakistan",
-            "tournament": "Asia Cup, 2025",
-            "match_id": 3,
+        {
+            "category": "Football",
+            "title": "Real Madrid Vs Villarreal Cf",
+            "tournament": "LALIGA 2025-26",
+            "match_id": 130903,
             "status": "LIVE",
-            "streamingStatus": "NOT_STARTED",
-            "startTime": "28 September 2025 08:00 PM",
+            "streamingStatus": "STARTED",
+            "startTime": "05 October 2025 12:30 AM",
             "startDate": "01 January 1970 05:30 AM",
-            "image": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_OldMatch_card.jpg",
+            "image": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
             "image_cdn": {
-                "TATAPLAY": "https://images.fancode.com/aig/match/v1/136749_CASACARDS_PARTNER_16_9_1920_1080.png",
-                "APP": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_OldMatch_card.jpg",
-                "PLAYBACK": null,
-                "LOGO": "https://www.fancode.com/skillup-uploads/cms-media/Asia-Cup,-2025-(1).png",
-                "SPORTS": "https://www.fancode.com/skillup-uploads/cms-media/Cricket_Fallback_Old_match-card.jpg",
-                "BG_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_OldMatch_card.jpg",
-                "SPORT_BY_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/INDvsPAK_AsiaCup_Match_card_opt2_1758959844413.jpg",
-                "CLOUDFARE": "https://d229kpbsb5jevy.cloudfront.net/vffancode2/aig/match/v1/136749_CASACARDS_PARTNER_16_9_1920_1080.png"
+                "TATAPLAY": "https://images.fancode.com/aig/match/v1/130903_CASACARDS_PARTNER_16_9_1920_1080.png",
+                "APP": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
+                "PLAYBACK": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
+                "LOGO": "https://www.fancode.com/skillup-uploads/cms-media/LALIGA-2025-26-Tour.png",
+                "SPORTS": "https://www.fancode.com/skillup-uploads/cms-media/Football_Fallback_Old_match-card.jpg",
+                "BG_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-Web.jpg",
+                "SPORT_BY_IMAGE": "https://www.fancode.com/skillup-uploads/cms-media/130903_5427_RM_VIL_fc-App.jpg",
+                "CLOUDFARE": "https://d229kpbsb5jevy.cloudfront.net/vffancode2/aig/match/v1/130903_CASACARDS_PARTNER_16_9_1920_1080.png"
             },
             "teams": [
                 {
-                    "name": "India",
-                    "shortName": "IND",
+                    "name": "Real Madrid",
+                    "shortName": "RM",
                     "flag": {
-                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/cr-flags/FC-IND@2x.png"
+                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/ft-flags/RM-FT2@2x.png"
                     },
                     "isWinner": null,
-                    "color": "#0f60de",
-                    "cricketScore": [],
+                    "color": "#ffdf50",
+                    "cricketScore": null,
                     "kabaddiScore": null,
-                    "footballScore": null,
+                    "footballScore": {
+                        "points": 0,
+                        "goals": []
+                    },
+                    "basketBallScore": null,
+                    "hockeyScore": null,
+                    "status": {
+                        "cricket": {
+                            "isBatting": false
+                        }
+                    }
+                },
+                {
+                    "name": "Villarreal CF",
+                    "shortName": "VIL",
+                    "flag": {
+                        "src": "https://d13ir53smqqeyp.cloudfront.net/flags/ft-flags/FC-VIL@2x.png"
+                    },
+                    "isWinner": null,
+                    "color": "#ffc0cb",
+                    "cricketScore": null,
+                    "kabaddiScore": null,
+                    "footballScore": {
+                        "points": 0,
+                        "goals": []
+                    },
                     "basketBallScore": null,
                     "hockeyScore": null,
                     "status": {
@@ -176,19 +232,17 @@
                     }
                 }
             ],
-            "language": "TAMIL",
-            "adfree_stream": "https://in-mc-fdlive.fancode.com/mumbai/130903_english_hls_7acae660d754143adfreeta-di_h264/index.m3u8",
+            "language": "BENGALI",
+            "adfree_stream": "https://in-mc-fdlive.fancode.com/mumbai/130903_bengali_hls_1769fbe90158531adfreeta-di_h264/index.m3u8",
             "dai_stream": "Unavailable",
             "STREAMING_CDN": {
-                "Primary_Playback_URL": "https://in-mc-fdlive.fancode.com/mumbai/130903_english_hls_7acae660d754143adfreeta-di_h264/index.m3u8",
-                "fancode_cdn": "https://in-mc-fdlive.fancode.com/mumbai/130903_english_hls_7acae660d754143adfreeta-di_h264/index.m3u8",
+                "Primary_Playback_URL": "https://in-mc-fdlive.fancode.com/mumbai/130903_bengali_hls_1769fbe90158531adfreeta-di_h264/index.m3u8",
+                "fancode_cdn": "https://in-mc-fdlive.fancode.com/mumbai/130903_bengali_hls_1769fbe90158531adfreeta-di_h264/index.m3u8",
                 "dai_google_cdn": "Unavailable",
                 "cloudfront_cdn": "Unavailable",
                 "sony_cdn": "Unavailable",
-                "language": "TAMIL"
+                "language": "BENGALI"
             }
         }
-               
-        
     ]
 }
