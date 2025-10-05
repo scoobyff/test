@@ -77,14 +77,14 @@
                 }
             ],
             "language": "ENGLISH",
-            "adfree_stream": "https://dm2jfno6qu4m4.cloudfront.net/out/v1/bd15bcb0a9564f909232d6c69c5e1189/index.m3u8",
+            "adfree_stream": "https://dai.google.com/linear/hls/event/CsFbu-WuQsmqXR6TeVE1sQ/master.m3u8",
             "dai_stream": "Unavailable",
             "STREAMING_CDN": {
-                "Primary_Playback_URL": "https://dm2jfno6qu4m4.cloudfront.net/out/v1/bd15bcb0a9564f909232d6c69c5e1189/index.m3u8",
-                "fancode_cdn": "https://dm2jfno6qu4m4.cloudfront.net/out/v1/bd15bcb0a9564f909232d6c69c5e1189/index.m3u8",
-                "dai_google_cdn": "Unavailable",
-                "cloudfront_cdn": "Unavailable",
-                "sony_cdn": "Unavailable",
+                "Primary_Playback_URL": "https://dai.google.com/linear/hls/event/CsFbu-WuQsmqXR6TeVE1sQ/master.m3u8",
+                "fancode_cdn": "https://dai.google.com/linear/hls/event/CsFbu-WuQsmqXR6TeVE1sQ/master.m3u8",
+                "dai_google_cdn": "https://dai.google.com/linear/hls/event/CsFbu-WuQsmqXR6TeVE1sQ/master.m3u8",
+                "cloudfront_cdn": "https://dai.google.com/linear/hls/event/CsFbu-WuQsmqXR6TeVE1sQ/master.m3u8",
+                "sony_cdn": "https://dai.google.com/linear/hls/event/CsFbu-WuQsmqXR6TeVE1sQ/master.m3u8",
                 "language": "ENGLISH"
             }
         },
