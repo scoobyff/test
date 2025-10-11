@@ -1,17 +1,31 @@
 #EXTM3U
 
-
-#EXTINF:-1 tvg-id="1112" group-title="Jiostar" tvg-logo="https://jiotvimages.cdn.jio.com/dare_images/images/Maa_HD.png",Star Maa HD
+#EXTINF:-1 tvg-id="english2" group-title="Jiostar" tvg-logo="https://jiotvimages.cdn.jio.com/dare_images/images/Star_Sports_HD2.png",Star Sports 2 HD
 #KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=6c4b78251e865fc2a23a000374c8e725:983ecd2ffe60cdcf2e5e76ae229a5cb8
+#KODIPROP:inputstream.adaptive.license_key=9457eb90129456fa8ea95e10ba4ac51e:e620a970cea474c491ac78ae71a4d764
 #EXTVLCOPT:http-user-agent=plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6 YGX/69.69.69.69
-#EXTHTTP:{"cookie":"__hdnea__=st=1759538293~exp=1759624693~acl=/*~hmac=a9933cab20d4829a2f7239f94385f67b86bf61cbf4a1ddeabeb56ce3549a2a27
-https://jiotvpllive.cdn.jio.com/bpk-tv/Maa_HD_BTS/output/index.mpd?%7Ccookie=__hdnea__=st=1759538293~exp=1759624693~acl=/*~hmac=a9933cab20d4829a2f7239f94385f67b86bf61cbf4a1ddeabeb56ce3549a2a27
+#EXTHTTP:{"cookie":"__hdnea__=st=1760143127~exp=1760229527~acl=/*~hmac=adbbda1cef3e3d58f98da940986ed3d3534194d38b02a807aa1bcbd3948c350f
+https://jiotvpllive.cdn.jio.com/bpk-tv/Star_Sports_HD2_BTS/output/index.mpd?%7Ccookie=__hdnea__=st=1760143127~exp=1760229527~acl=/*~hmac=adbbda1cef3e3d58f98da940986ed3d3534194d38b02a807aa1bcbd3948c350f
 
 
-#EXTINF:-1 tvg-id="1129" group-title="Jiostar" tvg-logo="https://jiotvimages.cdn.jio.com/dare_images/images/Maa_Music.png",Star Maa Music
+#EXTINF:-1 tvg-id="english" group-title="Jiostar" tvg-logo="https://jiotvimages.cdn.jio.com/dare_images/images/Star_Sports_HD1.png",Star Sports 1 HD
 #KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=80cfb1a6a4b251dd9b9ae92782a35917:b4cd88f5d71fe94993dd3476cdd63f33
+#KODIPROP:inputstream.adaptive.license_key=965dc2ddb1d85138ad787999a7f30ca5:859695076e67fe961836b564db6d689c
 #EXTVLCOPT:http-user-agent=plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6 YGX/69.69.69.69
-#EXTHTTP:{"cookie":"__hdnea__=st=1759538293~exp=1759624693~acl=/*~hmac=a9933cab20d4829a2f7239f94385f67b86bf61cbf4a1ddeabeb56ce3549a2a27
-https://jiotvpllive.cdn.jio.com/bpk-tv/Maa_Music_BTS/output/index.mpd?%7Ccookie=__hdnea__=st=1759538293~exp=1759624693~acl=/*~hmac=a9933cab20d4829a2f7239f94385f67b86bf61cbf4a1ddeabeb56ce3549a2a27
+#EXTHTTP:{"cookie":"__hdnea__=st=1760143127~exp=1760229527~acl=/*~hmac=adbbda1cef3e3d58f98da940986ed3d3534194d38b02a807aa1bcbd3948c350f
+https://jiotvpllive.cdn.jio.com/bpk-tv/Star_Sports_HD1_BTS/output/index.mpd?%7Ccookie=__hdnea__=st=1760143127~exp=1760229527~acl=/*~hmac=adbbda1cef3e3d58f98da940986ed3d3534194d38b02a807aa1bcbd3948c350f
+
+#EXTINF:-1 tvg-id="telugu2" group-title="Jiostar" tvg-logo="https://jiotvimages.cdn.jio.com/dare_images/images/Star_Sports2_Telugu_HD.png",Star Sports 2 Telugu HD
+#KODIPROP:inputstream.adaptive.license_type=clearkey
+#KODIPROP:inputstream.adaptive.license_key=c8a2fb190fc957c1b8333af9a7a39d31:be7497b59d4ce9e33d29bfd1d38bad1d
+#EXTVLCOPT:http-user-agent=plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6 YGX/69.69.69.69
+#EXTHTTP:{"cookie":"__hdnea__=st=1760143127~exp=1760229527~acl=/*~hmac=adbbda1cef3e3d58f98da940986ed3d3534194d38b02a807aa1bcbd3948c350f
+https://jiotvpllive.cdn.jio.com/bpk-tv/Star_Sports2_Telugu_HD_BTS/output/index.mpd?%7Ccookie=__hdnea__=st=1760143127~exp=1760229527~acl=/*~hmac=adbbda1cef3e3d58f98da940986ed3d3534194d38b02a807aa1bcbd3948c350f
+
+
+#EXTINF:-1 tvg-id="telugu" group-title="Jiostar" tvg-logo="https://jiotvimages.cdn.jio.com/dare_images/images/Star_Sports_1_Telugu_HD.png",Star Sports 1 Telugu HD
+#KODIPROP:inputstream.adaptive.license_type=clearkey
+#KODIPROP:inputstream.adaptive.license_key=49e84b9edfd85379b90c81b7d2d3d2bf:19c82d3ff094fa06af95820a1572ecb5
+#EXTVLCOPT:http-user-agent=plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6 YGX/69.69.69.69
+#EXTHTTP:{"cookie":"__hdnea__=st=1760143127~exp=1760229527~acl=/*~hmac=adbbda1cef3e3d58f98da940986ed3d3534194d38b02a807aa1bcbd3948c350f
+https://jiotvpllive.cdn.jio.com/bpk-tv/Star_Sports_1_Telugu_HD_BTS/output/index.mpd?%7Ccookie=__hdnea__=st=1760143127~exp=1760229527~acl=/*~hmac=adbbda1cef3e3d58f98da940986ed3d3534194d38b02a807aa1bcbd3948c350f
